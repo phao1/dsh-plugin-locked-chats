@@ -1,0 +1,81 @@
+.lc-browser,.lc-native-browser { display:flex; flex-direction:column; flex:1; min-height:0; color:var(--dsw-alias-label-primary); }
+.lc-entry-fallback { order:-1; padding-right:8px; }
+.lc-sidebar-private { flex:none; padding:0 0 8px; }
+.lc-sidebar-children { overflow:visible; }
+.lc-panel { box-sizing:border-box; width:100%; height:100%; max-width:1056px; margin:0 auto; padding:40px 40px 24px; overflow:auto; color:var(--dsw-alias-label-primary); font-size:14px; }
+.lc-vault-header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin:0 0 28px; }
+.lc-panel-heading { display:flex; gap:12px; align-items:center; }
+.lc-panel h1 { margin:0; font-size:26px; font-weight:600; letter-spacing:-.5px; }
+.lc-list { min-height:260px; }
+.lc-new-chat { display:flex!important; width:100%; height:68px!important; padding:0 22px!important; border:1px solid var(--dsw-alias-border-primary,#8882)!important; border-radius:var(--dsw-radius-xl,18px)!important; justify-content:flex-start!important; color:var(--dsw-alias-label-secondary)!important; margin-bottom:36px; }
+.lc-plus { font-size:26px; vertical-align:-2px; margin-right:16px; font-weight:300; }
+.lc-vault-group { margin:0 0 28px; }
+.lc-group-count { color:var(--dsw-alias-label-tertiary); font-size:11px; }
+.lc-chat-row { display:flex; align-items:center; gap:8px; padding:10px 8px; border-bottom:1px solid var(--dsw-alias-border-primary,#8882); }
+.lc-chat-title { flex:1; min-width:0; justify-content:flex-start!important; text-align:left; overflow:hidden; text-overflow:ellipsis; min-height:40px!important; }
+.lc-empty { text-align:center; margin:64px auto; color:var(--dsw-alias-label-secondary); max-width:380px; line-height:1.8; }
+.lc-empty h2 { color:var(--dsw-alias-label-primary); font-size:18px; font-weight:500; margin:14px 0 6px; }
+.lc-empty p { margin:0 0 20px; }
+.lc-pin-form { max-width:340px; margin:12px auto 0; }
+.lc-pin-form label { display:block; color:var(--dsw-alias-label-secondary); font-size:13px; }
+.lc-pin-cells { border:0; padding:0; margin:16px 0 24px; display:flex; justify-content:center; gap:12px; }
+.lc-pin-cells legend { text-align:center; font-size:12px; color:var(--dsw-alias-label-secondary); margin-bottom:12px; }
+.lc-field { width:100%; margin:8px 0; }
+.lc-actions { display:flex; justify-content:flex-end; gap:8px; }
+.lc-settings-link { margin:24px 0 12px; text-align:center; font-size:12px; }
+.lc-settings-link a { color:var(--dsw-alias-label-secondary); text-decoration:none; }
+.lc-settings-link a:hover { text-decoration:underline; }
+.lc-footnote { text-align:center; line-height:1.6; color:var(--dsw-alias-label-tertiary); font-size:12px; margin:0; }
+.lc-status { padding:16px; color:var(--dsw-alias-label-secondary); }
+.lc-ellipsis { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+.lc-private-header { display:flex; gap:4px; align-items:center; }
+@media(max-width:700px) { .lc-panel { padding:24px 16px; } .lc-panel h1 { font-size:22px; } .lc-vault-header { flex-wrap:wrap; } }
+.lc-row-copy { min-width:0; display:flex; flex-direction:column; gap:6px; }
+.lc-row-detail { font-size:12px; font-weight:400; color:var(--dsw-alias-label-secondary); }
+.lc-native-composer { margin:0 0 28px; min-width:0; }
+.lc-draft-workspace { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 12px 8px; color:var(--dsw-alias-label-secondary); font-size:12px; }
+.lc-native-composer [data-conversation-content] { height:auto; min-height:0; overflow:visible; }
+.lc-native-composer [data-conversation-scroll] { overflow:visible; }
+.lc-credential-settings { color:var(--dsw-alias-label-primary); font-size:14px; line-height:1.6; }
+.lc-credential-settings h2 { font-size:20px; margin:0 0 16px; }
+.lc-credential-settings h3 { font-size:15px; }
+.lc-credential-settings label { display:block; margin:16px 0; }
+.lc-credential-settings label>div,.lc-credential-settings label>input { display:block; width:100%; margin-top:8px; }
+.lc-settings-choices { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0; }
+.lc-credential-settings .lc-footnote { text-align:left; margin-top:24px; }
+/* Match dsh WorkspaceBrowser rows: 8px inset, 16px icon, 6px gap, 14px/20px text. */
+.lc-sidebar-entry,.lc-sidebar-group { width:100%; justify-content:flex-start!important; height:34px!important; padding:0 8px!important; gap:6px!important; font-size:14px!important; line-height:20px!important; font-weight:400; }
+.lc-sidebar-entry { color:var(--dsw-alias-label-primary); }
+.lc-sidebar-group { color:var(--dsw-alias-label-primary); }
+.lc-sidebar-group>span:first-child { color:var(--dsw-alias-label-tertiary); }
+.lc-sidebar-chat { width:100%; justify-content:flex-start!important; height:32px!important; padding:0 8px 0 28px!important; overflow:hidden; font-size:14px!important; line-height:20px!important; font-weight:400; }
+.lc-sidebar-relock { margin-left:18px; color:var(--dsw-alias-label-tertiary)!important; }
+.lc-vault-group h2 { display:flex; align-items:center; gap:6px; font-size:14px; line-height:20px; font-weight:400; color:var(--dsw-alias-label-primary); margin:0 0 6px; padding:0 8px; }
+.lc-vault-group h2>svg { color:var(--dsw-alias-label-tertiary); }
+.lc-chat-row { padding-left:0; padding-right:0; }
+.lc-chat-title { padding-left:28px!important; font-size:14px; line-height:20px; }
+.lc-pin-cell { box-sizing:border-box; width:54px; height:60px!important; border-radius:var(--dsw-radius-lg); padding:0!important; }
+.lc-pin-cell input { width:100%; min-width:0; text-align:center; font-size:23px; }
+.lc-reveal-pin { display:flex!important; margin:-12px auto 16px; }
+
+.lc-credential-settings label>span { display:flex; box-sizing:border-box; width:100%; margin-top:8px; }
+
+.lc-vault-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.lc-chat-preview { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; line-height:20px; color:var(--dsw-alias-label-secondary); font-weight:400; max-width:100%; }
+.lc-vault-group h2>span:last-child { margin-left:auto; }
+/* Native buttons have a fixed single-line height; a three-line preview row needs natural height. */
+.lc-chat-title { height:auto!important; padding-top:8px!important; padding-bottom:8px!important; }
+.lc-chat-title>.lc-row-copy { width:100%; }
+/* The vault composer sits near the top: retain the native command menu but fit
+   it below the card when that side has room, rather than exposing only row one. */
+.lc-native-composer [data-trigger-menu] {
+  top:var(--lc-menu-top,auto);
+  bottom:var(--lc-menu-bottom,calc(100% + 4px));
+  max-height:var(--lc-menu-max-height,400px)!important;
+}
+/* Native command option cards use the same overlay seat, without a trigger marker. */
+.lc-native-composer [data-composer-overlay] [aria-label]:has(> input):has(> [role="listbox"]) {
+  top:var(--lc-menu-top,auto);
+  bottom:var(--lc-menu-bottom,calc(100% + 4px));
+  max-height:min(320px,var(--lc-menu-max-height,320px))!important;
+}

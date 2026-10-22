@@ -1,0 +1,96 @@
+{
+  "name": "dsh-plugin-locked-chats",
+  "version": "0.1.0",
+  "description": "Web vault with workspace/chat hiding, PIN recovery and scoped local memory; no deletion, API or disk isolation",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./client": "./lib/client.js"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh-CN.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-workspace",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-api-workspace-controller",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-settings-general"
+      ],
+      "platform": "web"
+    }
+  },
+  "engines": {
+    "node": ">=24",
+    "dsh": "0.2.1-rc.2"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/build-client.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@scure/base": "2.0.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/dsh-client-connection": "0.2.1-rc.2",
+    "@deepseek-ai/schemastery": "3.18.5",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/dsh-client-connection": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-host-webserver": "0.2.1-rc.2",
+    "@deepseek-ai/schemastery": "3.18.5",
+    "@types/node": "24.10.1",
+    "esbuild": "0.25.12",
+    "happy-dom": "20.11.6",
+    "typescript": "5.9.3",
+    "react-dom": "18.3.1",
+    "@deepseek-ai/dsh-client-ui-slots": "0.2.1-rc.2"
+  },
+  "license": "MIT",
+  "author": "Hao Peng",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phao1/dsh-plugin-locked-chats.git",
+    "directory": "plugin"
+  },
+  "homepage": "https://github.com/phao1/dsh-plugin-locked-chats#readme",
+  "bugs": {
+    "url": "https://github.com/phao1/dsh-plugin-locked-chats/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "privacy",
+    "locked-chats"
+  ]
+}

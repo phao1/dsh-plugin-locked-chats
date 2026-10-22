@@ -1,0 +1,5 @@
+- insert:
+    - id: locked-chats
+      name: dsh-plugin-locked-chats
+      config:
+        directory: !!js dshHomePath('locked-chats')
