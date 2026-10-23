@@ -12,15 +12,40 @@
 
 ## 环境与安装
 
-- Node.js **24 或以上**。
-- DeepSeek Harness **0.2.1-rc.2**；其他版本尚未验证。
-- dsh Web 界面。插件界面目前为中文，本文档提供中英文切换。
+DeepSeek Harness **0.2.1-rc.2**；其他版本尚未验证。插件界面目前为中文，本文档提供中英文切换。按你使用的客户端选择安装方式。
+
+### 桌面端
+
+在桌面端侧栏打开 **插件 → 添加插件**，输入以下包名，安装后点击 **立即启用**，再重启桌面端：
+
+```text
+dsh-plugin-locked-chats@0.1.0
+```
+
+也可以使用桌面端提供的命令安装：
+
+1. 启动一次桌面端，在应用菜单的 **管理 dsh 命令… → 安装** 中注册命令。
+2. **完全退出桌面端**（仅关闭窗口会保留后台进程），打开新终端执行：
+
+   ```sh
+   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.0
+   ```
+
+3. 重新打开桌面端。
+
+桌面端自带运行时。命令行安装请使用上述桌面端注册的 `dsh`；npm 全局安装的 `dsh` 不能管理桌面端 profile。参见 [官方桌面端说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/apps/desktop/README.zh.md)。
+
+### Web 端
+
+需要 **Node.js 24+**，执行：
 
 ```sh
 dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
 ```
 
-重启对应 dsh profile 并刷新 Web 页面。不同独立安装应使用各自的插件数据目录。生产测试前请备份 dsh 数据及插件状态。
+重启对应 dsh profile，刷新 Web 页面。`web` 和 `desktop` 的插件安装独立，使用哪个客户端就安装到对应 profile。
+
+不同独立安装应使用各自的插件数据目录。生产测试前请备份 dsh 数据及插件状态。
 
 ## 已有能力
 

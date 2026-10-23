@@ -40,16 +40,44 @@ One plugin. One install command. No dsh source changes. Release `0.1.0` includes
 
 ## Start in a minute
 
-Requires **Node.js 24+, dsh 0.2.1-rc.2, and the Web interface**.
+Requires **dsh 0.2.1-rc.2**. Choose the installation method for your client.
+
+### Desktop
+
+Open **Plugins → Add plugin** in the desktop sidebar and enter this package spec. After installation, choose **Enable now** and restart the app:
+
+```text
+dsh-plugin-locked-chats@0.1.0
+```
+
+Alternatively, install with the command provided by the desktop app:
+
+1. Launch the desktop app once and register its command from the application menu: **Manage dsh Command… → Install**.
+2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
+
+   ```sh
+   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.0
+   ```
+
+3. Reopen the desktop app.
+
+Desktop bundles its runtime. For command-line installation, use the desktop-registered `dsh` above; an npm-installed global `dsh` cannot manage the desktop profile. See the [official Desktop guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/apps/desktop/README.md).
+
+### Web
+
+Requires **Node.js 24+**. Run:
 
 ```sh
 dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
 ```
 
-1. Restart the corresponding dsh profile and refresh the Web interface.
-2. Open a chat menu and choose **锁定聊天** (Lock chat).
-3. Set a four-digit PIN. **Download and safely store the recovery file**, then enter its code to confirm the backup.
-4. Open **锁定聊天** below the workspace heading, enter your PIN, and continue. Choose **立即上锁** to lock again when finished.
+Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
+
+### First use
+
+1. Open a chat menu and choose **锁定聊天** (Lock chat).
+2. Set a four-digit PIN. **Download and safely store the recovery file**, then enter its code to confirm the backup.
+3. Open **锁定聊天** below the workspace heading, enter your PIN, and continue. Choose **立即上锁** to lock again when finished.
 
 For a whole project, choose **锁定工作区** inside the vault. Future chats in that workspace are included automatically. The plugin UI currently uses Chinese.
 

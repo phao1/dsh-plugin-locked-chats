@@ -12,15 +12,41 @@ A Web plugin for DeepSeek Harness that keeps selected chats and workspaces out o
 
 ## Requirements and installation
 
-- Node.js **24 or later**.
-- DeepSeek Harness **0.2.1-rc.2**; other versions have not been verified.
-- The dsh Web interface. The plugin UI currently uses Chinese; this documentation is available in both languages.
+DeepSeek Harness **0.2.1-rc.2**; other versions have not been verified. The plugin UI currently uses Chinese; this documentation is available in both languages. Choose the installation method for your client.
+
+### Desktop
+
+Open **Plugins → Add plugin** in the desktop sidebar and enter this package spec. After installation, choose **Enable now** and restart the app:
+
+```text
+dsh-plugin-locked-chats@0.1.0
+```
+
+Alternatively, install with the command provided by the desktop app:
+
+1. Launch the desktop app once and register its command from the application menu: **Manage dsh Command… → Install**.
+2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
+
+   ```sh
+   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.0
+   ```
+
+3. Reopen the desktop app.
+
+Desktop bundles its runtime. For command-line installation, use the desktop-registered `dsh` above; an npm-installed global `dsh` cannot manage the desktop profile. See the [official Desktop guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/apps/desktop/README.md).
+
+### Web
+
+Requires **Node.js 24+**. Run:
 
 ```sh
 dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
 ```
 
-Restart the corresponding dsh profile and refresh its Web page. Use a separate plugin data directory for each independent installation. Back up your dsh data and plugin state before testing in production.
+Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
+
+
+Use a separate plugin data directory for each independent installation. Back up your dsh data and plugin state before testing in production.
 
 ## Features
 
