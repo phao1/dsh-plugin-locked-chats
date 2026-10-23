@@ -21,6 +21,7 @@ test('settings response prevents caching, framing and third-party script executi
 });
 
 test('settings DOM completes enrollment, cancellation, PIN change and recovery through the real API', { timeout: 15_000 }, async t => {
+  t.mock.timers.enable({ apis: ['Date'], now: 1_800_000_000_000 });
   const directory = mkdtempSync(join(tmpdir(), 'dsh-settings-dom-'));
   const credentials = new Credentials(directory, { attemptsPerWindow: 5, initialCooldownMs: 60_000,
     maxCooldownMs: 900_000, recoveryLifetimeMs: 300_000, maxPendingOperations: 64 });
@@ -100,6 +101,16 @@ test('settings DOM completes enrollment, cancellation, PIN change and recovery t
   await credentials.verifyPin('9753');
   assert.throws(() => credentials.beginRecovery('check', firstCode));
   assert.ok(credentials.beginRecovery('check', secondCode));
+  click('更换恢复码'); await submit({ pin: '9753' });
+  const abandonedCode = doc.querySelector<HTMLTextAreaElement>('#code')!.value;
+  t.mock.timers.tick(600_001); api.sweep();
+  await submit({ recoveryCode: abandonedCode });
+  assert.ok(doc.getElementById('message')!.textContent.includes('窗口访问已结束'));
+  assert.equal(doc.querySelector<HTMLTextAreaElement>('#code')!.value, '');
+  assert.equal(doc.getElementById('choices')!.hidden, false);
+  assert.ok(credentials.beginRecovery('check-preserved', secondCode));
+  click('修改 PIN'); await submit({ oldPin: '9753', pin: '8642', confirmation: '8642' });
+  await credentials.verifyPin('8642');
   assert.equal(window.localStorage.length, 0);
   assert.equal(window.sessionStorage.length, 0);
   assert.ok(doc.body.textContent.includes('界面隐藏版'));

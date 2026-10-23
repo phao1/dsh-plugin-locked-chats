@@ -68,6 +68,8 @@ Use a separate plugin data directory for each independent installation. Back up 
 
 Use **锁定工作区** (Lock workspace) in the vault to protect an existing workspace. Unlocking a workspace does not remove locks placed on individual chats. Files, folders, workspace membership, and pinning relationships are not moved.
 
+In the current development build, entering your PIN again reconnects an expired window after inactivity or a Host restart. An expired, unfinished credential setup or recovery returns to the start of that operation; your saved PIN, recovery code, and chats remain intact.
+
 **解除锁定** (Remove lock) restores ordinary visibility. For a chat protected through its workspace or parent chat, first remove that inherited protection; an additional individual lock must also be removed. The plugin does **not** provide chat deletion, a recycle bin, or permanent deletion. To manage or delete a chat, remove its locks and use whatever operations the host supports.
 
 ## PIN and recovery code

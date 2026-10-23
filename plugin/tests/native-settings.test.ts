@@ -12,6 +12,7 @@ import {HiddenChats} from '../src/hidden-chats.ts';
 import {CredentialApi} from '../src/api.ts';
 
 test('native PIN UI auto-verifies once, reveals new PINs, and completes settings recovery using the real API', {timeout:15000},async t=>{
+  t.mock.timers.enable({apis:['Date'],now:1_800_000_000_000});
   const dir=mkdtempSync(join(tmpdir(),'dsh-native-settings-'));
   const window=new Window({url:'http://localhost/'});
   const credentials=new Credentials(dir,{attemptsPerWindow:5,initialCooldownMs:60000,maxCooldownMs:900000,recoveryLifetimeMs:300000,maxPendingOperations:64});
@@ -44,6 +45,20 @@ test('native PIN UI auto-verifies once, reveals new PINs, and completes settings
   const code=(container.querySelector('input[aria-label="新恢复码"]') as any)?.value;assert.ok(code?.startsWith('DSHR1:'));assert.notEqual(code,pending.recoveryCode);
   await credentials.verifyPin('2468');await submit({recoveryCode:code});await credentials.verifyPin('9753');assert.equal(changes,2);
   await click('更换恢复码');await submit({pin:'9753'});await click('取消');assert.ok(credentials.beginRecovery('verify',code));
+  // Leave a backup form open past its window lifetime, then start again without reloading.
+  await click('更换恢复码');await submit({pin:'9753'});
+  const abandoned=(container.querySelector('input[aria-label="新恢复码"]') as any).value;
+  t.mock.timers.tick(600_001);api.sweep();
+  await submit({recoveryCode:abandoned});
+  assert.ok(container.textContent.includes('窗口访问已结束'));
+  assert.equal(container.querySelector('input[aria-label="新恢复码"]'),null);
+  assert.ok(credentials.beginRecovery('check-old-backup',code));
+  await click('修改 PIN');await submit({oldPin:'9753',pin:'8642',confirmation:'8642'});
+  await credentials.verifyPin('8642');assert.equal(changes,3);
+  // Fresh verification transparently opens a replacement window after another idle period.
+  t.mock.timers.tick(600_001);api.sweep();
+  await click('修改 PIN');await submit({oldPin:'8642',pin:'9753',confirmation:'9753'});
+  await credentials.verifyPin('9753');assert.equal(changes,4);
   const attempts:string[]=[];let edited='unchanged';
   function Probe({pin,enabled=true,reveal=false}:any){runtime.useAutoVerifyPin(pin,enabled,()=>{attempts.push(pin);});return runtime.createElement(runtime.PinCells,{label:'PIN',value:pin,onChange:(value:string)=>{edited=value;},allowReveal:reveal});}
   const render=async(props:any)=>runtime.act(async()=>root.render(runtime.createElement(Probe,props)));

@@ -14,14 +14,21 @@ export function CredentialSettings({onChanged}) {
     return()=>{active=false;client.close();};
   },[]);
   const choose=next=>{setShowPin(false);setMode(next);setValues({});setMessage('');};
-  const cancel=async()=>{if(busy)return;setBusy(true);try{if(backup)await api.current.call('cancel',{operationId:backup.operationId});setShowPin(false);setMode('');setBackup(null);setGrant('');setValues({});setMessage('已取消，原有凭据未改变。');}catch(e){setMessage(e.message);}finally{setBusy(false);}};
+  const failed=async e=>{
+    if(['wrong_connection','expired_operation','stale_operation','already_configured'].includes(e.code)){
+      setShowPin(false);setMode('');setBackup(null);setGrant('');setValues({});
+      await api.current.refresh();setConfigured(api.current.state.configured);setReady(api.current.state.ready);
+    }
+    setMessage(e.message);
+  };
+  const cancel=async()=>{if(busy)return;setBusy(true);try{if(backup)await api.current.call('cancel',{operationId:backup.operationId});setShowPin(false);setMode('');setBackup(null);setGrant('');setValues({});setMessage('已取消，原有凭据未改变。');}catch(e){await failed(e);}finally{setBusy(false);}};
   const submit=async e=>{e.preventDefault();if(busy)return;setBusy(true);setMessage('');
     try{await api.current.window();const result=await api.current.call(mode,{...values,...(backup?{operationId:backup.operationId}:{}),...(grant?{recoveryGrant:grant}:{})});
       if(mode==='beginRecovery'){setShowPin(false);setGrant(result.recoveryGrant);setMode('recover');setMessage('恢复码已验证，请设置新 PIN。');}
       else if(['setup','recover','rotateRecovery'].includes(mode)){setShowPin(false);setBackup(result);setMode('confirmBackup');}
       else{setShowPin(false);setMode('');setBackup(null);setGrant('');setConfigured(true);setMessage('凭据已更新，请重新验证锁定聊天。');await onChanged();}
       setValues({});
-    }catch(e){setMessage(e.message);}finally{setBusy(false);}
+    }catch(e){await failed(e);}finally{setBusy(false);}
   };
   const field=(name,label,pin=false)=>h('label',{key:name},label,h(Input,{name,type:pin&&name!=='oldPin'&&showPin?'text':'password',value:values[name]||'',onChange:e=>setValues(previous=>({...previous,[name]:e.target.value})),required:true,autoComplete:'off',disabled:busy,...(pin?{inputMode:'numeric',pattern:'[0-9]{4}',maxLength:4}:{maxLength:256})}));
   const download=()=>{const url=URL.createObjectURL(new Blob([backup.recoveryCode+'\n'],{type:'text/plain'}));const a=document.createElement('a');a.href=url;a.download='dsh-locked-chats-recovery.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};

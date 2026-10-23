@@ -25,13 +25,24 @@ export const SETTINGS_SCRIPT = String.raw`
 'use strict';
 const el = id => document.getElementById(id);
 let windowToken, configured = false, action, operation, recoveryGrant, busy = false;
-const messages = { invalid_pin:'PIN 不正确，或不是 4 位数字。', invalid_recovery:'恢复码无效。', invalid_input:'请检查输入，两次 PIN 必须一致。', backup_mismatch:'备份内容不一致，请重新输入保存的恢复码。', stale_operation:'凭据已发生变化，请刷新页面后重试。', expired_operation:'操作已过期，请取消后重新开始。', wrong_connection:'窗口授权已失效，请刷新页面。', unavailable:'凭据服务暂不可用，请稍后重试。', already_configured:'已设置 PIN，请刷新页面。', too_many_operations:'操作过多，请稍后重试。' };
+const messages = { invalid_pin:'PIN 不正确，或不是 4 位数字。', invalid_recovery:'恢复码无效。', invalid_input:'请检查输入，两次 PIN 必须一致。', backup_mismatch:'备份内容不一致，请重新输入保存的恢复码。', stale_operation:'凭据已发生变化，请重新开始操作。', expired_operation:'操作已过期，请重新开始。', wrong_connection:'窗口访问已结束，请重新开始操作。', unavailable:'凭据服务暂不可用，请稍后重试。', already_configured:'已设置 PIN，请选择其他操作。', too_many_operations:'操作过多，请稍后重试。' };
 function say(text) { el('message').textContent = text; }
 async function call(payload) {
   const response = await fetch('/api/locked-chats/credentials', { method:'POST', cache:'no-store', credentials:'same-origin', headers:{ 'content-type':'application/json', ...(windowToken ? {'x-dsh-private-window':windowToken} : {}) }, body:JSON.stringify(payload) });
   const result = await response.json();
-  if (!response.ok) throw new Error(result.error === 'throttled' ? '尝试次数过多，请在 '+result.retryAfterSeconds+' 秒后重试。' : (messages[result.error] || '操作失败，请刷新页面重试。'));
+  if (!response.ok) {
+    if (result.error === 'wrong_connection') windowToken = undefined;
+    const error = new Error(result.error === 'throttled' ? '尝试次数过多，请在 '+result.retryAfterSeconds+' 秒后重试。' : (messages[result.error] || '操作失败，请重试。'));
+    error.code = result.error; throw error;
+  }
   return result;
+}
+async function failed(error) {
+  if (['wrong_connection','expired_operation','stale_operation','already_configured'].includes(error.code)) {
+    home();
+    try { configured = (await call({action:'status'})).configured; home(); } catch {}
+  }
+  say(error instanceof Error ? error.message : '操作失败。');
 }
 function controls(locked) { busy = locked; document.querySelectorAll('button').forEach(button => { button.disabled = locked; }); }
 function wipe() { el('fields').replaceChildren(); el('code').value = ''; el('backup').hidden = true; el('form').hidden = true; operation = undefined; recoveryGrant = undefined; action = undefined; }
@@ -81,19 +92,20 @@ el('form').onsubmit = async event => {
   if (action === 'confirmBackup') payload.operationId = operation;
   if (action === 'recover') payload.recoveryGrant = recoveryGrant;
   try {
+    if (!windowToken) windowToken = (await call({action:'openWindow'})).windowToken;
     const result = await call(payload);
     if (action === 'beginRecovery') { recoveryGrant = result.recoveryGrant; show('recover'); say('恢复码已验证，请设置新 PIN。'); }
     else if (['setup','recover','rotateRecovery'].includes(action)) {
       operation = result.operationId; el('code').value = result.recoveryCode; el('backup').hidden = false;
       show('confirmBackup'); el('form').before(el('backup')); say('请先保存恢复码；确认备份后才会更新凭据。');
     } else { configured = true; home(); say('凭据已更新。请返回锁定聊天专区重新验证。'); }
-  } catch (error) { say(error instanceof Error ? error.message : '操作失败。'); }
+  } catch (error) { await failed(error); }
   finally { el('form').querySelectorAll('input').forEach(field => { field.value = ''; }); controls(false); }
 };
 el('cancel').onclick = async () => {
   if (busy) return; controls(true);
   try { if (operation) await call({action:'cancel', operationId:operation}); home(); say('已取消，原有凭据未改变。'); }
-  catch (error) { say(error instanceof Error ? error.message : '取消失败，请关闭页面。'); }
+  catch (error) { await failed(error); }
   finally { controls(false); }
 };
 el('download').onclick = () => {

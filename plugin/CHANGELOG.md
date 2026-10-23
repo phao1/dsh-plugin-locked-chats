@@ -2,6 +2,20 @@
 
 [English documentation](README.md) · [中文文档](README.zh-CN.md)
 
+## Unreleased / 未发布
+
+### English
+
+- Re-establish expired window connections during fresh PIN or recovery verification, including after a Host restart, without requiring a page refresh.
+- Clear obsolete access and pending credential forms; expired backups must be restarted, and protected writes are never automatically replayed.
+- Discard late window and unlock responses after closing or locking the client.
+
+### 简体中文
+
+- 输入 PIN 或恢复码重新验证时自动重建失效的窗口连接，支持闲置过期及 Host 重启后的恢复，无需刷新页面。
+- 清理失效授权及未完成的凭据表单；过期备份需重新开始，受保护的写操作不会自动重试。
+- 关闭或上锁后丢弃迟到的窗口创建及解锁响应。
+
 ## 0.1.0 — First release / 首个版本
 
 ### English

@@ -170,7 +170,12 @@ export function apply(ctx) {
         if(backup){await client.call('confirmBackup',{operationId:backup.operationId,recoveryCode:savedCode});setBackup(null);setSavedCode('');await client.refresh();setPin('');setConfirmation('');}
         else if(!state.configured){setBackup(await client.call('setup',{pin,confirmation}));setPin('');setConfirmation('');}
         else {await client.unlock(pin);setPin('');if(pendingSession){await client.setHidden(pendingSession,true);pendingSession=null;await lockNow();}else openPanel();client.update({authOpen:false});}
-      }catch(e){setError(e.message);if(state.configured)setPin('');}finally{submitting.current=false;setBusy(false);}
+      }catch(e){
+        if(['wrong_connection','expired_operation','stale_operation','already_configured'].includes(e.code)){
+          setBackup(null);setSavedCode('');setPin('');setConfirmation('');setSetupStep(0);await client.refresh();
+        }
+        setError(e.message);if(state.configured)setPin('');
+      }finally{submitting.current=false;setBusy(false);}
     };
     useAutoVerifyPin(pin,!!state.authOpen&&state.configured&&!backup,submit);
     const download=()=>{const url=URL.createObjectURL(new Blob([backup.recoveryCode+'\n'],{type:'text/plain'}));const a=document.createElement('a');a.href=url;a.download='dsh-locked-chats-recovery.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
