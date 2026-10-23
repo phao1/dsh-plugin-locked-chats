@@ -10,7 +10,7 @@
 [![MIT](https://img.shields.io/badge/license-MIT-5261d8)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-24%2B-344155)](plugin/package.json)
 
-**简体中文** · [English](README.md)
+**简体中文** · [English](README.en.md)
 
 [立即安装](#一分钟开始使用) · [看界面](#看得见的本地控制权) · [与 Codex 对比](#与-codex-对比对齐体验做深本地恢复) · [使用手册](plugin/README.zh-CN.md)
 

@@ -2,7 +2,7 @@
 
 **把私密聊天收起来，把恢复权留给自己。** Day 0 for dsh：四位 PIN、工作区继承保护、本地恢复文件。忘记 PIN 后可用已保存的恢复文件无损重设。
 
-[产品介绍、截图与 Codex 对比](https://github.com/phao1/dsh-plugin-locked-chats/blob/main/README.zh-CN.md) · [npm 安装包](https://www.npmjs.com/package/dsh-plugin-locked-chats)
+[产品介绍、截图与 Codex 对比](https://github.com/phao1/dsh-plugin-locked-chats#readme) · [npm 安装包](https://www.npmjs.com/package/dsh-plugin-locked-chats)
 
 [English](README.md) · **简体中文**
 

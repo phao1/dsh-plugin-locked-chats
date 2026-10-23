@@ -2,126 +2,126 @@
 
 # Locked Chats for dsh
 
-### Keep private chats out of sight. Keep recovery in your hands.
+### 把私密聊天收起来，把恢复权留给自己。
 
-**Day 0 for dsh · Four-digit PIN · Workspace locks · Local recovery files**
+**Day 0 for dsh · 四位 PIN · 工作区锁定 · 本地恢复文件**
 
 [![npm](https://img.shields.io/npm/v/dsh-plugin-locked-chats?color=5261d8)](https://www.npmjs.com/package/dsh-plugin-locked-chats)
 [![MIT](https://img.shields.io/badge/license-MIT-5261d8)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-24%2B-344155)](plugin/package.json)
 
-**English** · [简体中文](README.zh-CN.md)
+**简体中文** · [English](README.en.md)
 
-[Install](#start-in-a-minute) · [Screenshots](#local-control-you-can-see) · [Compare with Codex](#compared-with-codex-familiar-workflows-local-recovery) · [User guide](plugin/README.md)
+[立即安装](#一分钟开始使用) · [看界面](#看得见的本地控制权) · [与 Codex 对比](#与-codex-对比对齐体验做深本地恢复) · [使用手册](plugin/README.zh-CN.md)
 
 </div>
 
-![Locked Chats — Private chats and local recovery](assets/hero-en.svg)
+![Locked Chats — 私密聊天与本地恢复](assets/hero-zh.svg)
 
-Sharing your screen without sharing every chat title? Mixing everyday development with private discussions in the same project? Forgot your PIN but want to keep your conversations?
+共享屏幕时，不想让私人聊天标题出现在侧边栏？一个项目里，既有日常开发，也有不适合随手展示的讨论？忘了 PIN，又不想为了恢复访问而丢掉聊天？
 
-**Locked Chats adds everyday interface privacy to DeepSeek Harness Web. Open your locked chats with a PIN, continue the original conversation, and regain access with a recovery file you saved yourself.**
+**Locked Chats 给 DeepSeek Harness Web 加上一层日常界面隐私：用 PIN 打开锁定区，继续原来的对话；用自己保存的恢复文件，在忘记 PIN 时重新拿回访问权。**
 
-One plugin. One install command. No dsh source changes. Release `0.1.0` includes chat hiding, workspace locks, recovery files, and separate local memory domains for the plugin.
+独立插件，一条命令安装，无需修改 dsh 源码。首发 `0.1.0` 已提供聊天隐藏、工作区锁定、恢复文件与插件本地记忆分离。
 
-> Interface privacy, not disk encryption. Designed to reduce accidental exposure during everyday use; it does not block someone with file, API, or device access.
+> 界面隐私，不是磁盘加密。适合减少日常展示中的意外曝光；不能阻止有文件、API 或设备访问权限的人读取数据。
 
-## Why install it?
+## 为什么值得装
 
-| Your situation | What Locked Chats does |
+| 你遇到的事 | Locked Chats 的做法 |
 | --- | --- |
-| Private chat titles should stay out of a screen share | Hide selected chats from supported history, pinned, and search surfaces |
-| A whole project needs privacy | Lock a workspace, including existing, future, and descendant chats |
-| You still want a full conversation experience | Continue with dsh's native conversation, composer, attachments, model controls, and permission interactions |
-| You forgot the PIN | Import your saved recovery file, verify it, and reset the PIN without deleting chats |
-| Private memories should not surface in ordinary chats | Separate ordinary and private memory in the plugin's own memory tool |
+| 开会共享屏幕，私人聊天标题不想露出来 | 锁定单条聊天，从已适配的普通历史、置顶与搜索入口隐藏 |
+| 整个项目都需要收起来 | 锁定工作区，同时覆盖已有、以后新建及派生的聊天 |
+| 隐藏之后，还想正常使用 AI | 解锁后继续使用 dsh 原生对话、输入、附件、模型选择和权限交互 |
+| 忘了四位 PIN，不想重来 | 导入自己保存的恢复文件，验证后重设 PIN，保留聊天 |
+| 私密讨论中的记忆不想混入普通聊天 | 插件记忆工具按真实会话锁定状态区分普通与私密记忆 |
 
-**The key benefit: you hold the recovery credential.** Download a recovery file during setup and store it separately. Import it if you forget the PIN. The plugin does not store plaintext recovery codes by default, and a recovery file is not a backup of your chats.
+**最有价值的地方：恢复凭据在你手里。** 首次设置时下载恢复文件，单独保存；忘记 PIN 时导入即可进入重设流程。插件默认不保存明文恢复码，恢复文件也不是聊天备份。
 
-## Start in a minute
+## 一分钟开始使用
 
-Requires **Node.js 24+, dsh 0.2.1-rc.2, and the Web interface**.
+需要 **Node.js 24+、dsh 0.2.1-rc.2 和 Web 界面**。
 
 ```sh
 dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
 ```
 
-1. Restart the corresponding dsh profile and refresh the Web interface.
-2. Open a chat menu and choose **锁定聊天** (Lock chat).
-3. Set a four-digit PIN. **Download and safely store the recovery file**, then enter its code to confirm the backup.
-4. Open **锁定聊天** below the workspace heading, enter your PIN, and continue. Choose **立即上锁** to lock again when finished.
+1. 重启对应 dsh profile，刷新 Web 页面。
+2. 打开某条聊天的菜单，选择 **锁定聊天**。
+3. 首次使用时设置四位 PIN，**下载并妥善保存恢复文件**，回填恢复码确认备份。
+4. 从工作区标题下的 **锁定聊天** 入口输入 PIN，继续聊天；离开前点击 **立即上锁**。
 
-For a whole project, choose **锁定工作区** inside the vault. Future chats in that workspace are included automatically. The plugin UI currently uses Chinese.
+想保护整个项目？在保险箱中选择 **锁定工作区**。以后在该工作区新建的聊天也会被纳入保护，不必逐条操作。
 
-## Local control you can see
+## 看得见的本地控制权
 
-These are **isolated demonstrations of the actual 0.1.0 settings component**, not full dsh host screenshots. The presentation frame and base-control styling are demo adaptations. No real chats, PINs, or recovery codes are shown; host themes may look different.
+以下为 **0.1.0 真实插件设置组件的隔离演示截图**，不是完整 dsh 宿主截图。展示外框与基础控件样式为演示适配；不含真实聊天、PIN 或恢复码。实际外观随宿主主题变化。
 
-### 01 · One place for PINs and recovery
+### 01 · PIN、恢复、凭据更换，一个入口
 
-Change your everyday PIN, recover access, or rotate your recovery credential.
+日常用 PIN，意外用恢复码；也可以主动更换恢复凭据。
 
-![Manage PIN and recovery credentials](assets/screenshots/01-settings.png)
+![凭据管理：修改 PIN、忘记 PIN、更换恢复码](assets/screenshots/01-settings.png)
 
-### 02 · Change your PIN, keep your conversations
+### 02 · 修改 PIN，不打断已有聊天
 
-Verify the current PIN and enter a new one. Reveal or hide the new PIN to reduce typing mistakes.
+验证当前 PIN，再设置新 PIN。新 PIN 支持显示/隐藏，减少输入错误。
 
-![The actual change-PIN component](assets/screenshots/02-pin.png)
+![修改四位 PIN 的真实组件表单](assets/screenshots/02-pin.png)
 
-### 03 · Forgot the PIN? Import your local recovery file
+### 03 · 忘记 PIN？导入本地恢复文件
 
-Verify the recovery credential, set a new PIN, then save and confirm a fresh recovery backup.
+恢复文件由你单独保管。通过验证后设置新 PIN，再保存新的恢复凭据，完成备份确认。
 
-![Import a local recovery file to reset the PIN](assets/screenshots/03-recovery.png)
+![导入恢复文件，无损重设 PIN](assets/screenshots/03-recovery.png)
 
-## Compared with Codex: familiar workflows, local recovery
+## 与 Codex 对比：对齐体验，做深本地恢复
 
-**This comparison covers chat organization and privacy workflows, not model performance or the entire Codex product.** Keep the project-and-chat habits familiar from Codex; add a focused privacy and recovery workflow to dsh.
+**对标的是聊天管理与隐私体验，不是模型能力或整个 Codex 产品。** 熟悉 Codex 的项目与聊天组织方式，可以继续沿用这种工作习惯；Locked Chats 把重点放在 dsh 的界面隐私和本地恢复控制上。
 
-| Capability / experience | Codex comparison baseline | dsh + Locked Chats 0.1.0 |
+| 能力 / 体验 | Codex 对比基线 | dsh + Locked Chats 0.1.0 |
 | --- | --- | --- |
-| Project-based chats and continuing existing conversations | Documented project and chat management | **Aligned experience:** keeps dsh workspaces and native conversations |
-| Native input, attachments, and interaction patterns | Codex's own native workflow | **Aligned experience:** reuses dsh components, not a claim of identical cross-product APIs or features |
-| Four-digit PIN and hidden chats | Specific locking mechanism not confirmed in the reviewed public docs | **Implemented:** lock, unlock, continue, and relock |
-| Workspace and future-chat inheritance | Equivalent rules not confirmed | **Implemented:** existing, future, and descendant chats are covered |
-| Locally saved recovery credentials and non-destructive PIN reset | Equivalent local-file recovery workflow not confirmed | **Core differentiator:** download, keep, and import your own recovery file |
-| Separate private and ordinary memory | Codex-wide memory is not treated as an equivalent implementation | **Explicit scope:** only the plugin's `locked_chats_memory` tool |
-| Disk encryption, API isolation, mobile biometrics | Outside this comparison | **Not provided:** PIN-based hiding does not replace these controls |
+| 按项目组织聊天、继续原有对话 | 官方文档已介绍项目与聊天管理 | **体验对齐**：沿用 dsh 工作区与原生对话，不另造聊天客户端 |
+| 保留原生输入、附件与操作习惯 | Codex 自身的原生工作流 | **体验对齐**：复用 dsh 原生组件；不是跨产品接口或功能完全一致 |
+| 四位 PIN 隐藏聊天 | 本次公开文档核验未确认具体锁定机制 | **已实现**：聊天锁定、解锁后继续、主动重新上锁 |
+| 整个工作区及未来聊天的继承保护 | 未确认等价规则 | **已实现**：工作区锁覆盖已有、新建与派生聊天 |
+| 本地保存恢复凭据、忘记 PIN 后无损恢复 | 未确认等价的本地恢复文件流程 | **核心差异化**：恢复文件可下载、自己保管、导入验证并重设 PIN |
+| 私密记忆与普通记忆分开 | 不把 Codex 的全局记忆行为视为等价实现 | **明确作用域**：仅隔离本插件的 `locked_chats_memory` |
+| 磁盘加密、API 隔离、移动端生物识别 | 不在本表评测范围 | **未提供**：不能用 PIN 隐藏替代这些安全机制 |
 
-**The extra step here is recovery you control:** hide the conversation, and keep your own route back to it. Local recovery files, inherited workspace protection, and inspectable plugin code are concrete benefits. Unverified Codex features are not labeled “missing,” and this is not a claim of overall superiority.
+**我们的进阶之处，是把“收起来”做成“收起来，也能自己找回来”。** 本地恢复文件、工作区继承保护、可审查的插件代码，是这款 dsh 插件的具体价值；对未核实的 Codex 能力，不以“没有”或“全面超越”代替证据。
 
-Comparison checked **2026-10-23** against [OpenAI's projects and chats documentation](https://learn.chatgpt.com/docs/projects?surface=app) and the [ChatGPT / Codex changelog](https://learn.chatgpt.com/docs/changelog). Not confirmed in public documentation does not mean unavailable; features may vary by release or account. This is not an official OpenAI or DeepSeek plugin.
+比较核验日期：**2026-10-23**。参考 [OpenAI 项目与聊天文档](https://learn.chatgpt.com/docs/projects?surface=app) 与 [ChatGPT / Codex 更新日志](https://learn.chatgpt.com/docs/changelog)。公开文档未确认不代表产品不存在该功能；能力可能随版本或账户开放情况变化。本项目不是 OpenAI 或 DeepSeek 官方插件。
 
-## Recover a forgotten PIN
+## 忘记 PIN 时怎么恢复
 
-Open **更多 → 设置 → 锁定聊天 → 忘记 PIN** (More → Settings → Locked Chats → Forgot PIN).
+**更多 → 设置 → 锁定聊天 → 忘记 PIN**
 
-1. Import your saved `dsh-locked-chats-recovery.txt`, or enter its recovery code.
-2. After verification, choose and confirm a new PIN.
-3. Download a fresh recovery file and enter its new code to confirm the backup.
-4. Open your locked chats with the new PIN. **Recovery does not delete conversations.**
+1. 导入此前保存的 `dsh-locked-chats-recovery.txt`，或输入恢复码。
+2. 验证通过后，设置并确认新 PIN。
+3. 下载并保存新的恢复文件，回填新恢复码完成确认。
+4. 使用新 PIN 打开锁定聊天。**恢复过程不会删除聊天。**
 
-Keep the recovery file separate from plugin data, for example in a password manager or secure storage you control. **If both the PIN and recovery code are lost, there is no credential-free recovery path.** Local credential storage here means recovery backup, not model API-key storage or chat-encryption key escrow.
+恢复文件应与插件数据分开保管，可以放入密码管理器或自己控制的安全存储。**如果 PIN 和恢复码都丢失，插件没有无凭据恢复入口。**“本地密钥保存”在这里指恢复凭据备份，不是保存模型 API Key，也不是聊天加密密钥托管。
 
-## Memory with an explicit boundary
+## 记忆也有边界
 
-The native `locked_chats_memory` tool remembers, searches, or forgets information when explicitly requested.
+插件提供原生工具 `locked_chats_memory`，按你的明确要求保存、搜索或忘记记忆。
 
-- **Ordinary chats:** read and write ordinary memory only.
-- **Locked chats:** read ordinary and private memory; additions, changes, and deletions affect private memory only.
-- Scope comes from real host session/workspace state, not a session ID or memory domain chosen by the model.
+- **普通聊天**：只读写普通记忆。
+- **锁定聊天**：可以读取普通及私密记忆，但新增、修改、删除只作用于私密记忆。
+- 判断依据来自宿主的真实会话与工作区状态，模型不能自行选择别人的会话或记忆域。
 
-Locking a chat does not retroactively make its old ordinary memories private. Other MCP services, files, and provider memory are outside this boundary.
+已有普通记忆不会因上锁自动变成私密记忆；其他 MCP、文件、供应商记忆不在这个隔离范围内。
 
 <details>
-<summary><strong>Protection scope, compatibility, and verification</strong></summary>
+<summary><strong>保护范围、兼容性与开发验证</strong></summary>
 
-Hiding applies to supported Web surfaces. Raw APIs, CLI tools, chat files, other clients, and disabling the plugin can bypass it. Existing shares are not revoked; other open windows may need a refresh. This is not a security boundary against device administrators or malicious software.
+仅对已适配的 Web 入口提供界面隐藏。原始 API、CLI、聊天文件、其他客户端、禁用插件等仍可绕过；旧分享不会被撤销，其他已打开窗口可能需要刷新。不要把它当作对设备管理员或恶意程序的安全边界。
 
-Validated target: dsh `0.2.1-rc.2`. Other versions, full background-task eligibility controls, account synchronization, and biometrics are unverified or unimplemented.
+已验证目标为 dsh `0.2.1-rc.2`；其他版本、完整后台任务资格限制、账户同步和生物识别尚未验证或实现。
 
-Build, typecheck, and **59 tests passed** before release. Packed import, service activation, and disposal checks also passed. Isolated tests do not cover every real host scenario.
+发布前构建、类型检查和 **59 项测试通过**；打包加载、服务注册与卸载检查通过。隔离测试不等同于覆盖所有真实宿主场景。
 
 ```sh
 cd plugin
@@ -131,12 +131,12 @@ npm run typecheck
 npm test
 ```
 
-[Full English guide](plugin/README.md) · [Changelog](plugin/CHANGELOG.md) · [Report an issue](https://github.com/phao1/dsh-plugin-locked-chats/issues)
+[完整中文手册](plugin/README.zh-CN.md) · [版本说明](plugin/CHANGELOG.md) · [报告问题](https://github.com/phao1/dsh-plugin-locked-chats/issues)
 
 </details>
 
 ---
 
-**Give private discussions their own place in dsh. [Install Locked Chats.](#start-in-a-minute)**
+**想让 dsh 的私人讨论有自己的位置？[从安装开始。](#一分钟开始使用)**
 
 [MIT](LICENSE) · Made for DeepSeek Harness Web.
