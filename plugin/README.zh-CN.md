@@ -1,5 +1,9 @@
 # dsh 锁定聊天
 
+**把私密聊天收起来，把恢复权留给自己。** Day 0 for dsh：四位 PIN、工作区继承保护、本地恢复文件。忘记 PIN 后可用已保存的恢复文件无损重设。
+
+[产品介绍、截图与 Codex 对比](https://github.com/phao1/dsh-plugin-locked-chats/blob/main/README.zh-CN.md) · [npm 安装包](https://www.npmjs.com/package/dsh-plugin-locked-chats)
+
 [English](README.md) · **简体中文**
 
 为 DeepSeek Harness 提供四位 PIN 保险箱，将指定聊天和工作区从日常导航中隐藏。**0.1.0** 是首个发布版本，无需修改 dsh 源码。

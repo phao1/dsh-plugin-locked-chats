@@ -1,5 +1,9 @@
 # Locked Chats for dsh
 
+**Keep private chats out of sight. Keep recovery in your hands.** Day 0 for dsh: four-digit PINs, inherited workspace protection, and local recovery files. Reset a forgotten PIN with your saved recovery credential without deleting chats.
+
+[Product overview, screenshots, and Codex comparison](https://github.com/phao1/dsh-plugin-locked-chats#readme) · [npm package](https://www.npmjs.com/package/dsh-plugin-locked-chats)
+
 **English** · [简体中文](README.zh-CN.md)
 
 A Web plugin for DeepSeek Harness that keeps selected chats and workspaces out of everyday navigation behind a four-digit PIN. Version **0.1.0** is the first release. It does not require changes to dsh source code.
