@@ -6,7 +6,7 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-A Web plugin for DeepSeek Harness that keeps selected chats and workspaces out of everyday navigation behind a four-digit PIN. Version **0.1.0** is the first release. It does not require changes to dsh source code.
+A Web plugin for DeepSeek Harness that keeps selected chats and workspaces out of everyday navigation behind a four-digit PIN. Version **0.1.1** fixes expired-window unlock failures. It does not require changes to dsh source code.
 
 > This is an application UI privacy feature, not encryption or a security boundary for the underlying chat data.
 
@@ -19,7 +19,7 @@ DeepSeek Harness **0.2.1-rc.2**; other versions have not been verified. The plug
 Open **Plugins → Add plugin** in the desktop sidebar and enter this package spec. After installation, choose **Enable now** and restart the app:
 
 ```text
-dsh-plugin-locked-chats@0.1.0
+dsh-plugin-locked-chats@0.1.1
 ```
 
 Alternatively, install with the command provided by the desktop app:
@@ -28,7 +28,7 @@ Alternatively, install with the command provided by the desktop app:
 2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
 
    ```sh
-   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.0
+   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.1
    ```
 
 3. Reopen the desktop app.
@@ -40,13 +40,19 @@ Desktop bundles its runtime. For command-line installation, use the desktop-regi
 Requires **Node.js 24+**. Run:
 
 ```sh
-dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
+dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
 ```
 
 Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
 
 
 Use a separate plugin data directory for each independent installation. Back up your dsh data and plugin state before testing in production.
+
+## Upgrade from 0.1.0
+
+Fully quit Desktop and run the `--profile desktop add` command above with the desktop-registered `dsh`, then reopen the app. For Web, run the `--profile web add` command above, restart the profile, and refresh its page. The same commands replace an earlier local fix package with the published version.
+
+Your chats, PIN, and recovery code are preserved; no credential reset is needed. See the [0.1.1 release notes](CHANGELOG.md).
 
 ## Features
 
@@ -68,7 +74,7 @@ Use a separate plugin data directory for each independent installation. Back up 
 
 Use **锁定工作区** (Lock workspace) in the vault to protect an existing workspace. Unlocking a workspace does not remove locks placed on individual chats. Files, folders, workspace membership, and pinning relationships are not moved.
 
-In the current development build, entering your PIN again reconnects an expired window after inactivity or a Host restart. An expired, unfinished credential setup or recovery returns to the start of that operation; your saved PIN, recovery code, and chats remain intact.
+Since version **0.1.1**, entering your PIN again reconnects an expired window after inactivity or a Host restart. An expired, unfinished credential setup or recovery returns to the start of that operation; your saved PIN, recovery code, and chats remain intact.
 
 **解除锁定** (Remove lock) restores ordinary visibility. For a chat protected through its workspace or parent chat, first remove that inherited protection; an additional individual lock must also be removed. The plugin does **not** provide chat deletion, a recycle bin, or permanent deletion. To manage or delete a chat, remove its locks and use whatever operations the host supports.
 

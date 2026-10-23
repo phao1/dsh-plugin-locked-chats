@@ -6,7 +6,7 @@
 
 [English](README.md) · **简体中文**
 
-为 DeepSeek Harness 提供四位 PIN 保险箱，将指定聊天和工作区从日常导航中隐藏。**0.1.0** 是首个发布版本，无需修改 dsh 源码。
+为 DeepSeek Harness 提供四位 PIN 保险箱，将指定聊天和工作区从日常导航中隐藏。**0.1.1** 修复了窗口过期后无法解锁的问题，无需修改 dsh 源码。
 
 > 这是应用内界面隐私功能，不是底层聊天数据的加密或安全隔离边界。
 
@@ -19,7 +19,7 @@ DeepSeek Harness **0.2.1-rc.2**；其他版本尚未验证。插件界面目前�
 在桌面端侧栏打开 **插件 → 添加插件**，输入以下包名，安装后点击 **立即启用**，再重启桌面端：
 
 ```text
-dsh-plugin-locked-chats@0.1.0
+dsh-plugin-locked-chats@0.1.1
 ```
 
 也可以使用桌面端提供的命令安装：
@@ -28,7 +28,7 @@ dsh-plugin-locked-chats@0.1.0
 2. **完全退出桌面端**（仅关闭窗口会保留后台进程），打开新终端执行：
 
    ```sh
-   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.0
+   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.1
    ```
 
 3. 重新打开桌面端。
@@ -40,12 +40,18 @@ dsh-plugin-locked-chats@0.1.0
 需要 **Node.js 24+**，执行：
 
 ```sh
-dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
+dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
 ```
 
 重启对应 dsh profile，刷新 Web 页面。`web` 和 `desktop` 的插件安装独立，使用哪个客户端就安装到对应 profile。
 
 不同独立安装应使用各自的插件数据目录。生产测试前请备份 dsh 数据及插件状态。
+
+## 从 0.1.0 升级
+
+完全退出桌面端后，使用桌面端注册的 `dsh` 执行上方 `--profile desktop add` 命令，再重新打开应用。Web 端执行上方 `--profile web add` 命令后重启对应 profile 并刷新页面。同样的命令也可将此前的本地修复包替换为正式发布版。
+
+现有聊天、PIN 和恢复码会保留，无需重设凭据。详见 [0.1.1 版本说明](CHANGELOG.md)。
 
 ## 已有能力
 
@@ -67,7 +73,7 @@ dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
 
 保险箱中的 **锁定工作区** 可以保护整个已有工作区。解除工作区锁不会移除单独设置的聊天锁，也不会移动文件、目录、工作区归属或置顶关系。
 
-当前开发版会在闲置或 Host 重启导致窗口连接失效后，通过再次输入 PIN 自动重新连接。未完成的凭据设置或恢复操作过期后会返回起点；已保存的 PIN、恢复码和聊天保持不变。
+**0.1.1** 会在闲置或 Host 重启导致窗口连接失效后，通过再次输入 PIN 自动重新连接。未完成的凭据设置或恢复操作过期后会返回起点；已保存的 PIN、恢复码和聊天保持不变。
 
 **解除锁定** 会恢复普通可见状态。若聊天受到工作区或父聊天的继承保护，需先解除对应来源；同时存在独立锁时还需解除独立锁。插件**不提供聊天删除、回收站或永久删除**。需要管理或删除聊天时，先解除锁定，再使用宿主实际支持的操作。
 

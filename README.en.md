@@ -22,7 +22,7 @@ Sharing your screen without sharing every chat title? Mixing everyday developmen
 
 **Locked Chats adds everyday interface privacy to DeepSeek Harness Web. Open your locked chats with a PIN, continue the original conversation, and regain access with a recovery file you saved yourself.**
 
-One plugin. One install command. No dsh source changes. Release `0.1.0` includes chat hiding, workspace locks, recovery files, and separate local memory domains for the plugin.
+One plugin. One install command. No dsh source changes. Release `0.1.1` includes chat hiding, workspace locks, recovery files, and separate local memory domains for the plugin, and fixes unlock failures caused by expired window credentials after inactivity or a Host restart.
 
 > Interface privacy, not disk encryption. Designed to reduce accidental exposure during everyday use; it does not block someone with file, API, or device access.
 
@@ -47,7 +47,7 @@ Requires **dsh 0.2.1-rc.2**. Choose the installation method for your client.
 Open **Plugins → Add plugin** in the desktop sidebar and enter this package spec. After installation, choose **Enable now** and restart the app:
 
 ```text
-dsh-plugin-locked-chats@0.1.0
+dsh-plugin-locked-chats@0.1.1
 ```
 
 Alternatively, install with the command provided by the desktop app:
@@ -56,7 +56,7 @@ Alternatively, install with the command provided by the desktop app:
 2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
 
    ```sh
-   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.0
+   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.1
    ```
 
 3. Reopen the desktop app.
@@ -68,10 +68,16 @@ Desktop bundles its runtime. For command-line installation, use the desktop-regi
 Requires **Node.js 24+**. Run:
 
 ```sh
-dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
+dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
 ```
 
 Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
+
+### Upgrade from 0.1.0
+
+Fully quit Desktop, run the `--profile desktop add` command above using the desktop-registered `dsh`, then reopen the app. For Web, run the `--profile web add` command above, restart that profile, and refresh the page. These steps also replace the earlier local fix package.
+
+Upgrading preserves existing chats, PINs, and recovery codes. No credential reset is needed. After an idle window expires, enter your PIN again to reconnect. See the [0.1.1 release notes](plugin/CHANGELOG.md).
 
 ### First use
 
@@ -149,7 +155,7 @@ Hiding applies to supported Web surfaces. Raw APIs, CLI tools, chat files, other
 
 Validated target: dsh `0.2.1-rc.2`. Other versions, full background-task eligibility controls, account synchronization, and biometrics are unverified or unimplemented.
 
-Build, typecheck, and **59 tests passed** before release. Packed import, service activation, and disposal checks also passed. Isolated tests do not cover every real host scenario.
+Build, typecheck, and **69 tests passed** before release. Packed import, service activation, and disposal checks also passed. Isolated tests do not cover every real host scenario.
 
 ```sh
 cd plugin

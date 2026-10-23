@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-locked-chats",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Web vault with workspace/chat hiding, PIN recovery and scoped local memory; no deletion, API or disk isolation",
   "type": "module",
   "main": "lib/index.js",

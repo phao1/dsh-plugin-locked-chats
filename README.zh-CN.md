@@ -22,7 +22,7 @@
 
 **Locked Chats 给 DeepSeek Harness Web 加上一层日常界面隐私：用 PIN 打开锁定区，继续原来的对话；用自己保存的恢复文件，在忘记 PIN 时重新拿回访问权。**
 
-独立插件，一条命令安装，无需修改 dsh 源码。首发 `0.1.0` 已提供聊天隐藏、工作区锁定、恢复文件与插件本地记忆分离。
+独立插件，一条命令安装，无需修改 dsh 源码。`0.1.1` 提供聊天隐藏、工作区锁定、恢复文件与插件本地记忆分离，并修复闲置或服务重启后窗口凭据失效导致无法解锁的问题。
 
 > 界面隐私，不是磁盘加密。适合减少日常展示中的意外曝光；不能阻止有文件、API 或设备访问权限的人读取数据。
 
@@ -47,7 +47,7 @@
 在桌面端侧栏打开 **插件 → 添加插件**，输入以下包名，安装后点击 **立即启用**，再重启桌面端：
 
 ```text
-dsh-plugin-locked-chats@0.1.0
+dsh-plugin-locked-chats@0.1.1
 ```
 
 也可以使用桌面端提供的命令安装：
@@ -56,7 +56,7 @@ dsh-plugin-locked-chats@0.1.0
 2. **完全退出桌面端**（仅关闭窗口会保留后台进程），打开新终端执行：
 
    ```sh
-   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.0
+   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.1
    ```
 
 3. 重新打开桌面端。
@@ -68,10 +68,16 @@ dsh-plugin-locked-chats@0.1.0
 需要 **Node.js 24+**，执行：
 
 ```sh
-dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
+dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
 ```
 
 重启对应 dsh profile，刷新 Web 页面。`web` 和 `desktop` 的插件安装独立，使用哪个客户端就安装到对应 profile。
+
+### 从 0.1.0 升级
+
+完全退出桌面端后，用桌面端注册的 `dsh` 执行上方 `--profile desktop add` 命令，再重新打开应用；Web 端执行上方 `--profile web add` 命令后重启对应 profile 并刷新页面。这也适用于此前安装的本地修复包。
+
+升级保留现有聊天、PIN 和恢复码，无需重新设置。闲置过期后再次输入 PIN 即可重新连接。完整变更见 [0.1.1 版本说明](plugin/CHANGELOG.md)。
 
 ### 开始使用
 
@@ -149,7 +155,7 @@ dsh plugin --profile web add dsh-plugin-locked-chats@0.1.0
 
 已验证目标为 dsh `0.2.1-rc.2`；其他版本、完整后台任务资格限制、账户同步和生物识别尚未验证或实现。
 
-发布前构建、类型检查和 **59 项测试通过**；打包加载、服务注册与卸载检查通过。隔离测试不等同于覆盖所有真实宿主场景。
+发布前构建、类型检查和 **69 项测试通过**；打包加载、服务注册与卸载检查通过。隔离测试不等同于覆盖所有真实宿主场景。
 
 ```sh
 cd plugin
