@@ -9,6 +9,7 @@ import { PinCells,useAutoVerifyPin } from './pin-input.mjs';
 import { CredentialSettings } from './credential-settings.mjs';
 import { mountDraftMenuLayout } from './draft-menu-layout.mjs';
 import { createDraftPreparer } from './native-draft.mjs';
+import { protectPrivateDraftReuse } from './private-draft-reuse.mjs';
 import { vaultGroups } from './vault.mjs';
 import { PrivacyClient, visibleHits } from './model.mjs';
 import { Button, Input, Menu, MenuItemButton, Modal, IconFolderOpenRegular, IconFolderCloseRegular, IconChevronDownOutlineRegular, IconEllipsisOutlineRegular, IconEditOutlineRegular, relativeTime } from '@deepseek-ai/dsh-client-ui-primitives';
@@ -34,6 +35,7 @@ export function apply(ctx) {
   const client = new PrivacyClient();
   const previews = createChatPreviewLoader(ctx.sessions,()=>client.state.unlocked);
   const currentProtected=()=>protectedIds(ctx.sessions.list.getSnapshot(),client.state,ctx.workspaces.list.getSnapshot().items);
+  ctx.effect(() => protectPrivateDraftReuse(ctx.sessions, currentProtected));
   let pendingSession = null;
   let privateOpen = false;
   let alive = true;

@@ -3,6 +3,9 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dsh: ['0.2.1-rc.2', '0.2.1-rc.3']
     defaults:
       run:
         working-directory: plugin
@@ -14,6 +17,8 @@ jobs:
           cache: npm
           cache-dependency-path: plugin/package-lock.json
       - run: npm ci
+      - name: Use target DSH client interfaces
+        run: npm install --no-save --package-lock=false @deepseek-ai/dsh-client-ui-slots@${{ matrix.dsh }} @deepseek-ai/dsh-client-connection@${{ matrix.dsh }} @deepseek-ai/dsh-host-webserver@${{ matrix.dsh }}
       - run: npm run typecheck
       - run: npm test
       - run: npm pack --dry-run

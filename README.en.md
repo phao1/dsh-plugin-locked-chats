@@ -22,7 +22,7 @@ Sharing your screen without sharing every chat title? Mixing everyday developmen
 
 **Locked Chats adds everyday interface privacy to DeepSeek Harness Web. Open your locked chats with a PIN, continue the original conversation, and regain access with a recovery file you saved yourself.**
 
-One plugin. One install command. No dsh source changes. Release `0.1.1` includes chat hiding, workspace locks, recovery files, and separate local memory domains for the plugin, and fixes unlock failures caused by expired window credentials after inactivity or a Host restart.
+One plugin. One install command. No dsh source changes. Release `0.1.2` adds declared support for dsh `0.2.1-rc.3`, retaining `rc.2` support and the window reconnection fix from `0.1.1`. It also prevents ordinary New Session from reusing a vault-owned draft on rc.3.
 
 > Interface privacy, not disk encryption. Designed to reduce accidental exposure during everyday use; it does not block someone with file, API, or device access.
 
@@ -40,14 +40,16 @@ One plugin. One install command. No dsh source changes. Release `0.1.1` includes
 
 ## Start in a minute
 
-Requires **dsh 0.2.1-rc.2**. Choose the installation method for your client.
+Compatibility targets: **dsh 0.2.1-rc.2 or 0.2.1-rc.3**. Choose the installation method for your client.
+
+This release is distributed as a GitHub Release tarball; npm `0.1.2` has not been published. Install the URL below directly.
 
 ### Desktop
 
-Open **Plugins → Add plugin** in the desktop sidebar and enter this package spec. After installation, choose **Enable now** and restart the app:
+Open **Plugins → Add plugin** in the desktop sidebar and enter this release tarball URL. After installation, choose **Enable now** and restart the app:
 
 ```text
-dsh-plugin-locked-chats@0.1.1
+https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
 ```
 
 Alternatively, install with the command provided by the desktop app:
@@ -56,7 +58,7 @@ Alternatively, install with the command provided by the desktop app:
 2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
 
    ```sh
-   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.1
+   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
    ```
 
 3. Reopen the desktop app.
@@ -68,16 +70,16 @@ Desktop bundles its runtime. For command-line installation, use the desktop-regi
 Requires **Node.js 24+**. Run:
 
 ```sh
-dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
+dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
 ```
 
 Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
 
-### Upgrade from 0.1.0
+### Upgrade from 0.1.0 / 0.1.1
 
 Fully quit Desktop, run the `--profile desktop add` command above using the desktop-registered `dsh`, then reopen the app. For Web, run the `--profile web add` command above, restart that profile, and refresh the page. These steps also replace the earlier local fix package.
 
-Upgrading preserves existing chats, PINs, and recovery codes. No credential reset is needed. After an idle window expires, enter your PIN again to reconnect. See the [0.1.1 release notes](plugin/CHANGELOG.md).
+Upgrading preserves existing chats, PINs, and recovery codes. No credential reset is needed. After an idle window expires, enter your PIN again to reconnect. See the [0.1.2 release notes](plugin/CHANGELOG.md).
 
 ### First use
 
@@ -153,9 +155,9 @@ Locking a chat does not retroactively make its old ordinary memories private. Ot
 
 Hiding applies to supported Web surfaces. Raw APIs, CLI tools, chat files, other clients, and disabling the plugin can bypass it. Existing shares are not revoked; other open windows may need a refresh. This is not a security boundary against device administrators or malicious software.
 
-Validated target: dsh `0.2.1-rc.2`. Other versions, full background-task eligibility controls, account synchronization, and biometrics are unverified or unimplemented.
+The compatibility range explicitly lists dsh `0.2.1-rc.2 || 0.2.1-rc.3`. RC plugin interfaces can change, so the plugin does not use `*` or an open-ended range. Future host versions are added after interface, installation, and behavior checks. Versions outside this range are blocked by the host; that does not prove a runtime incompatibility. Full background-task eligibility controls, account synchronization, and biometrics are not implemented.
 
-Build, typecheck, and **69 tests passed** before release. Packed import, service activation, and disposal checks also passed. Isolated tests do not cover every real host scenario.
+Version `0.1.2` passed 71 automated tests in each client-interface environment, build, and typecheck. The package was installed on official rc.2 and rc.3 Web Hosts and verified for locking, PIN unlock, continued chat, search filtering, native views/groups, and persistent drag ordering. Replies used a local synthetic model. Desktop rc.3 still requires user acceptance; Web verification is not Desktop verification.
 
 ```sh
 cd plugin
