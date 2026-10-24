@@ -18,7 +18,7 @@ test('settings response prevents caching, framing and third-party script executi
   assert.match(csp, /connect-src 'self'/);
   assert.notEqual(csp, second.headers.get('content-security-policy'));
   const nonce = csp.match(/script-src 'nonce-([^']+)'/)![1];
-  assert.ok((await first.text()).includes(`<script nonce="${nonce}">`));
+  assert.ok((await first.text()).includes(`<script nonce="${nonce}">'use strict';`));
 });
 
 for(const language of ['en','zh']) test(`settings DOM enrollment, cancellation, PIN change and recovery (${language})`, { timeout: 15_000 }, async t => {

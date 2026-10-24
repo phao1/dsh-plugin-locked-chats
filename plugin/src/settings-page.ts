@@ -15,7 +15,7 @@ export function settingsPage(request?: Request): Response {
 <form id="form" hidden autocomplete="off"><div id="fields"></div><button id="submit" type="submit">${t("continue")}</button><button id="cancel" type="button">${t("cancel")}</button></form>
 <section id="backup" hidden><h2>${t("saveNewRecovery")}</h2><p>${t("backupAdvice")}</p><textarea id="code" readonly aria-label="${t("newRecovery")}"></textarea><button id="download" type="button">${t("downloadRecovery")}</button><p>${t("backupPrompt")}</p></section>
 <p class="muted">${t("pageFootnote")}</p></main>
-<script nonce="${nonce}">${`const messages=${JSON.stringify(language==='zh'?zh:en).replace(/</g,'\\u003c')};`}${SETTINGS_SCRIPT}</script></html>`, { headers: {
+<script nonce="${nonce}">${`'use strict';const messages=${JSON.stringify(language==='zh'?zh:en).replace(/</g,'\\u003c')};`}${SETTINGS_SCRIPT}</script></html>`, { headers: {
     'content-language': language==='zh'?'zh-CN':'en', 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store',
     'content-security-policy': `default-src 'none'; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'`,
     'referrer-policy': 'no-referrer', 'x-content-type-options': 'nosniff',
