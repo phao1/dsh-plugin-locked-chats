@@ -22,7 +22,7 @@
 
 **Locked Chats 给 DeepSeek Harness Web 加上一层日常界面隐私：用 PIN 打开锁定区，继续原来的对话；用自己保存的恢复文件，在忘记 PIN 时重新拿回访问权。**
 
-独立插件，一条命令安装，无需修改 dsh 源码。`0.1.1` 提供聊天隐藏、工作区锁定、恢复文件与插件本地记忆分离，并修复闲置或服务重启后窗口凭据失效导致无法解锁的问题。
+独立插件，一条命令安装，无需修改 dsh 源码。`0.1.2` 增加 dsh `0.2.1-rc.3` 兼容声明，并保留 `rc.2` 支持和 `0.1.1` 的窗口重连修复；同时修复 rc.3 普通新建会话可能复用保险箱草稿的问题。
 
 > 界面隐私，不是磁盘加密。适合减少日常展示中的意外曝光；不能阻止有文件、API 或设备访问权限的人读取数据。
 
@@ -40,14 +40,16 @@
 
 ## 一分钟开始使用
 
-需要 **dsh 0.2.1-rc.2**。按你使用的客户端选择安装方式。
+兼容目标为 **dsh 0.2.1-rc.2 或 0.2.1-rc.3**。按你使用的客户端选择安装方式。
+
+本轮交付 GitHub Release 安装包；npm `0.1.2` 尚未发布。以下链接可直接安装。
 
 ### 桌面端
 
-在桌面端侧栏打开 **插件 → 添加插件**，输入以下包名，安装后点击 **立即启用**，再重启桌面端：
+在桌面端侧栏打开 **插件 → 添加插件**，输入以下安装包链接，安装后点击 **立即启用**，再重启桌面端：
 
 ```text
-dsh-plugin-locked-chats@0.1.1
+https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
 ```
 
 也可以使用桌面端提供的命令安装：
@@ -56,7 +58,7 @@ dsh-plugin-locked-chats@0.1.1
 2. **完全退出桌面端**（仅关闭窗口会保留后台进程），打开新终端执行：
 
    ```sh
-   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.1
+   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
    ```
 
 3. 重新打开桌面端。
@@ -68,16 +70,16 @@ dsh-plugin-locked-chats@0.1.1
 需要 **Node.js 24+**，执行：
 
 ```sh
-dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
+dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
 ```
 
 重启对应 dsh profile，刷新 Web 页面。`web` 和 `desktop` 的插件安装独立，使用哪个客户端就安装到对应 profile。
 
-### 从 0.1.0 升级
+### 从 0.1.0 / 0.1.1 升级
 
 完全退出桌面端后，用桌面端注册的 `dsh` 执行上方 `--profile desktop add` 命令，再重新打开应用；Web 端执行上方 `--profile web add` 命令后重启对应 profile 并刷新页面。这也适用于此前安装的本地修复包。
 
-升级保留现有聊天、PIN 和恢复码，无需重新设置。闲置过期后再次输入 PIN 即可重新连接。完整变更见 [0.1.1 版本说明](plugin/CHANGELOG.md)。
+升级保留现有聊天、PIN 和恢复码，无需重新设置。闲置过期后再次输入 PIN 即可重新连接。完整变更见 [0.1.2 版本说明](plugin/CHANGELOG.md)。
 
 ### 开始使用
 
@@ -153,9 +155,9 @@ dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
 
 仅对已适配的 Web 入口提供界面隐藏。原始 API、CLI、聊天文件、其他客户端、禁用插件等仍可绕过；旧分享不会被撤销，其他已打开窗口可能需要刷新。不要把它当作对设备管理员或恶意程序的安全边界。
 
-已验证目标为 dsh `0.2.1-rc.2`；其他版本、完整后台任务资格限制、账户同步和生物识别尚未验证或实现。
+兼容范围明确列为 dsh `0.2.1-rc.2 || 0.2.1-rc.3`。RC 版本的插件接口仍可能变化，因此不使用 `*` 或开放式范围；后续宿主版本通过接口、安装及行为验证后再扩展支持。范围之外的版本会被宿主阻止加载，不代表已证明运行不兼容。完整后台任务资格限制、账户同步和生物识别尚未实现。
 
-发布前构建、类型检查和 **69 项测试通过**；打包加载、服务注册与卸载检查通过。隔离测试不等同于覆盖所有真实宿主场景。
+`0.1.2` 已通过两套接口环境各 71 项自动化测试、构建和类型检查，并在官方 rc.2/rc.3 真实 Web 宿主安装后完成锁定、PIN 解锁、继续聊天、搜索过滤、原生视图/分组和拖拽持久化验收。测试回复来自本地合成模型。桌面端 rc.3 仍待用户验收，Web 验证不等同于桌面端验证。
 
 ```sh
 cd plugin

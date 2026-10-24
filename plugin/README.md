@@ -6,20 +6,22 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-A Web plugin for DeepSeek Harness that keeps selected chats and workspaces out of everyday navigation behind a four-digit PIN. Version **0.1.1** fixes expired-window unlock failures. It does not require changes to dsh source code.
+A Web plugin for DeepSeek Harness that keeps selected chats and workspaces out of everyday navigation behind a four-digit PIN. Version **0.1.2** adds declared rc.3 support while retaining rc.2 compatibility and the expired-window reconnection fix from **0.1.1**. It does not require changes to dsh source code.
 
 > This is an application UI privacy feature, not encryption or a security boundary for the underlying chat data.
 
 ## Requirements and installation
 
-DeepSeek Harness **0.2.1-rc.2**; other versions have not been verified. The plugin UI currently uses Chinese; this documentation is available in both languages. Choose the installation method for your client.
+Compatibility targets: DeepSeek Harness **0.2.1-rc.2 or 0.2.1-rc.3**; other versions are not declared compatible. The plugin UI currently uses Chinese; this documentation is available in both languages. Choose the installation method for your client.
+
+This release is distributed as a GitHub Release tarball; npm `0.1.2` has not been published. Install the URL below directly.
 
 ### Desktop
 
-Open **Plugins → Add plugin** in the desktop sidebar and enter this package spec. After installation, choose **Enable now** and restart the app:
+Open **Plugins → Add plugin** in the desktop sidebar and enter this release tarball URL. After installation, choose **Enable now** and restart the app:
 
 ```text
-dsh-plugin-locked-chats@0.1.1
+https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
 ```
 
 Alternatively, install with the command provided by the desktop app:
@@ -28,7 +30,7 @@ Alternatively, install with the command provided by the desktop app:
 2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
 
    ```sh
-   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.1
+   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
    ```
 
 3. Reopen the desktop app.
@@ -40,7 +42,7 @@ Desktop bundles its runtime. For command-line installation, use the desktop-regi
 Requires **Node.js 24+**. Run:
 
 ```sh
-dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
+dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
 ```
 
 Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
@@ -48,11 +50,17 @@ Restart the corresponding dsh profile and refresh the Web interface. Plugin inst
 
 Use a separate plugin data directory for each independent installation. Back up your dsh data and plugin state before testing in production.
 
-## Upgrade from 0.1.0
+## Upgrade from 0.1.0 / 0.1.1
 
-Fully quit Desktop and run the `--profile desktop add` command above with the desktop-registered `dsh`, then reopen the app. For Web, run the `--profile web add` command above, restart the profile, and refresh its page. The same commands replace an earlier local fix package with the published version.
+Fully quit Desktop and run the `--profile desktop add` command above with the desktop-registered `dsh`, then reopen the app. For Web, run the `--profile web add` command above, restart the profile, and refresh its page. The same commands replace an earlier local fix package with the release package.
 
-Your chats, PIN, and recovery code are preserved; no credential reset is needed. See the [0.1.1 release notes](CHANGELOG.md).
+Your chats, PIN, and recovery code are preserved; no credential reset is needed. See the [0.1.2 release notes](CHANGELOG.md).
+
+## Host compatibility policy
+
+The declared range is `0.2.1-rc.2 || 0.2.1-rc.3`. RC plugin interfaces can change, so support is extended after checking interfaces, package installation, and user behavior on each new host version. The plugin does not use `*` or silently waive the host compatibility check. A version outside the range is unverified, not necessarily broken.
+
+Version `0.1.2` passed 71 automated tests in each client-interface environment, build, and typecheck. The package was installed on official rc.2 and rc.3 Web Hosts and verified for locking, PIN unlock, continued chat, search filtering, native views/groups, and persistent drag ordering. Replies used a local synthetic model. Desktop rc.3 still requires user acceptance; Web verification is not Desktop verification.
 
 ## Features
 
