@@ -28,8 +28,8 @@ test('preview bounds source parsing and Unicode output, and handles attachment-o
   let parsed=0;
   const actual=latestChatPreview([user('😀'.repeat(10000))],(text:string)=>{parsed=text.length;return text;});
   assert.ok(parsed<=4096);assert.equal(Array.from(actual).length,120);assert.ok(actual.endsWith('…'));
-  assert.equal(latestChatPreview([]),'暂无正文');
-  assert.equal(latestChatPreview([assistant([{type:'image'}])]),'仅附件消息，暂无文字摘要');
+  assert.equal(latestChatPreview([]),'No message text yet');
+  assert.equal(latestChatPreview([assistant([{type:'image'}])]),'Attachments only; no text preview');
   assert.equal(latestChatPreview([user('**hello**')],(text:string)=>text.replaceAll('**','')),'hello');
 });
 
@@ -59,6 +59,6 @@ test('aborted row and error history release their own references, and locked sta
   let unlocked=false,calls=0,released=0;
   const loader=createPreviewLoader({retain:()=>{calls++;return {ready:Promise.resolve(binding([],'error')),release:()=>{released++;}};}},()=>unlocked);
   await assert.rejects(loader.load('x'),{name:'AbortError'});assert.equal(calls,0);unlocked=true;
-  await assert.rejects(loader.load('x'),/摘要暂不可用/);assert.equal(released,1);
+  await assert.rejects(loader.load('x'),/Preview unavailable/);assert.equal(released,1);
   const controller=new AbortController();controller.abort();await assert.rejects(loader.load('y',{signal:controller.signal}),{name:'AbortError'});assert.equal(calls,1);loader.dispose();
 });

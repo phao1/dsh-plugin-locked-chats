@@ -83,15 +83,17 @@ Upgrading preserves existing chats, PINs, and recovery codes. No credential rese
 
 ### First use
 
-1. Open a chat menu and choose **锁定聊天** (Lock chat).
+1. Open a chat menu and choose **Lock chat** (**锁定聊天** in Chinese).
 2. Set a four-digit PIN. **Download and safely store the recovery file**, then enter its code to confirm the backup.
-3. Open **锁定聊天** below the workspace heading, enter your PIN, and continue. Choose **立即上锁** to lock again when finished.
+3. Open **Locked Chats** (**锁定聊天**) below the workspace heading, enter your PIN, and continue. Choose **Lock now** (**立即上锁**) when finished.
 
-For a whole project, choose **锁定工作区** inside the vault. Future chats in that workspace are included automatically. The plugin UI currently uses Chinese.
+For a whole project, choose **Lock workspace** (**锁定工作区**) inside the vault. Future chats in that workspace are included automatically.
+
+**Unreleased source update:** the plugin now follows dsh’s English / Simplified Chinese language preference, including settings, recovery, lock/unlock dialogs, errors, and accessibility labels. Set the language in dsh’s General settings. Previously distributed packages still use Chinese; the installation links above do not include this source update. See the [localization validation and limits](LOCALIZATION.en.md).
 
 ## Local control you can see
 
-These are **isolated demonstrations of the actual 0.1.0 settings component**, not full dsh host screenshots. The presentation frame and base-control styling are demo adaptations. No real chats, PINs, or recovery codes are shown; host themes may look different.
+These are **isolated demonstrations of the actual 0.1.0 settings component**, not full dsh host screenshots. The presentation frame and base-control styling are demo adaptations. No real chats, PINs, or recovery codes are shown; host themes may look different. These historical Chinese images do not demonstrate the unreleased English UI. New screenshots could not be captured under the current browser/host restrictions.
 
 ### 01 · One place for PINs and recovery
 
@@ -131,7 +133,7 @@ Comparison checked **2026-10-23** against [OpenAI's projects and chats documenta
 
 ## Recover a forgotten PIN
 
-Open **更多 → 设置 → 锁定聊天 → 忘记 PIN** (More → Settings → Locked Chats → Forgot PIN).
+Open **More → Settings → Locked Chats → Forgot PIN** (**更多 → 设置 → 锁定聊天 → 忘记 PIN** in Chinese).
 
 1. Import your saved `dsh-locked-chats-recovery.txt`, or enter its recovery code.
 2. After verification, choose and confirm a new PIN.

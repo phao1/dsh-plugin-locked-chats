@@ -2,6 +2,26 @@
 
 [English documentation](README.md) · [中文文档](README.zh-CN.md)
 
+## Unreleased — English UI / 尚未发布 — 英文界面
+
+### English
+
+- Follow the native dsh locale service for English and Simplified Chinese settings, navigation, PIN/recovery, lock/unlock dialogs, API errors, previews, relative times, and accessibility labels.
+- Preserve open PIN/recovery forms and translate already visible status/error messages when the language changes; keep user-authored titles and text unchanged.
+- Localize the standalone owner settings page using a supported language query or browser preference, with English fallback. Correct its outdated memory-isolation description.
+- Preserve the existing 0.1.0 Chinese screenshots as explicitly historical isolated components. Browser/host restrictions prevented new screenshots; no new end-to-end host verification is claimed.
+
+This source update retains manifest version 0.1.2; it does not alter an existing release or npm package. See [validation](https://github.com/phao1/dsh-plugin-locked-chats/blob/fix/english-localization/LOCALIZATION.en.md).
+
+### 简体中文
+
+- 通过 dsh 原生语言服务提供 English / 简体中文设置、导航、PIN/恢复、锁定/解锁弹窗、API 错误、摘要占位符、相对时间及无障碍标签。
+- 切换语言时保留已打开的 PIN/恢复表单，并翻译已显示的状态/错误消息；用户自行填写的标题及正文保持原文。
+- 独立的所有者设置页面通过支持的语言查询参数或浏览器偏好选语言，默认回退英文；修正其中已过时的记忆隔离说明。
+- 保留现有中文截图并明确其为历史 0.1.0 隔离组件。浏览器及宿主限制阻止了新截图，不声称本轮完成完整宿主验收。
+
+本次源码更新保持清单版本 0.1.2，不更改已有 Release 或 npm 安装包。详见[验证记录](https://github.com/phao1/dsh-plugin-locked-chats/blob/fix/english-localization/LOCALIZATION.zh-CN.md)。
+
 ## 0.1.2 — 2026-10-24 — DSH rc.3 compatibility / DSH rc.3 兼容
 
 ### English

@@ -1,3 +1,4 @@
+import {createTranslator,en} from '../src/locales.ts';
 /** UI filtering only: the Host's chat API is deliberately unchanged. */
 export function visibleRows(catalog, hidden, archived, includeArchived = false) {
   return catalog.ids.map(id => catalog.byId[id]).filter(row => row && !hidden.has(row.id)
@@ -5,13 +6,13 @@ export function visibleRows(catalog, hidden, archived, includeArchived = false) 
 }
 export function visibleHits(items, hidden) { return items.filter(item => !hidden.has(item.sessionId)); }
 const freshCredentialActions = new Set(['unlock', 'setup', 'beginRecovery', 'changePin', 'rotateRecovery']);
-function windowEnded() {
-  return Object.assign(new Error('窗口访问已结束，请重新验证或重新开始操作。'), { code: 'wrong_connection' });
+function windowEnded(t) {
+  return Object.assign(new Error(t('error.wrong_connection')), { code: 'wrong_connection' });
 }
 export class PrivacyClient {
   state = { ready: false, ids: [], explicitIds: [], workspaceIds: [], configured: false, unlocked: false, error: '' };
   listeners = new Set(); windowToken = ''; accessToken = ''; opening = null; generation = 0; unlockAttempt = 0;
-  constructor(fetcher = globalThis.fetch.bind(globalThis)) { this.fetcher = fetcher; }
+  constructor(fetcher = globalThis.fetch.bind(globalThis), t=createTranslator('en')) { this.fetcher = fetcher; this.t=t; }
   getSnapshot = () => this.state;
   subscribe = listener => { this.listeners.add(listener); return () => this.listeners.delete(listener); };
   update(patch) { this.state = { ...this.state, ...patch }; for (const fn of this.listeners) fn(); }
@@ -39,27 +40,28 @@ export class PrivacyClient {
         && windowToken === this.windowToken && values.accessToken === this.accessToken) {
         this.accessToken = ''; this.update({ unlocked: false });
       }
-      const messages = { access_denied:'此操作需要有效的锁定聊天授权。',workspace_not_found: '此工作区已不存在，请刷新。', session_not_found: '此聊天已不存在，请刷新。', not_locked: '请先锁定此聊天。', unavailable: '功能暂不可用，请稍后重试。', invalid_recovery: '恢复码不正确或已失效。', stale_operation: '凭据已改变，请重新开始操作。', expired_operation: '操作已过期，请重新开始。', invalid_pin: 'PIN 不正确，请重试。', throttled: `尝试过多，请 ${result.retryAfterSeconds ?? 60} 秒后重试。`, backup_mismatch: '恢复码与备份不一致。', invalid_input: '请输入一致的 4 位数字 PIN。', access_expired: '访问已结束，请重新验证。', wrong_connection: windowEnded().message };
-      const error = new Error(messages[result.error] ?? '操作失败，请刷新后重试。');
+      const key=Object.hasOwn(en,`error.${result.error}`)?`error.${result.error}`:'operationFailed';
+      const error = new Error(this.t(key,{seconds:result.retryAfterSeconds??60}));
+      error.retryAfterSeconds=result.retryAfterSeconds??60;
       error.code = result.error;
       throw error;
     }
     if (!['status', 'hiddenIds', 'openWindow', 'closeWindow'].includes(action)
-      && (generation !== this.generation || windowToken !== this.windowToken)) throw windowEnded();
+      && (generation !== this.generation || windowToken !== this.windowToken)) throw windowEnded(this.t);
     return result;
   }
   async refresh() {
     try {
       const [status, hidden] = await Promise.all([this.call('status'), this.call('hiddenIds')]);
       this.update({ ready: true, ...this.membership(hidden), configured: status.configured, error: '' });
-    } catch (error) { this.accessToken = ''; this.update({ ready: false, unlocked: false, error: error.message }); }
+    } catch (error) { this.accessToken = ''; this.update({ ready: false, unlocked: false, error }); }
   }
   async window() {
     if (!this.windowToken) {
       if (!this.opening) {
         const generation = this.generation;
         const opening = this.call('openWindow').then(result => {
-          if (generation !== this.generation) throw windowEnded();
+          if (generation !== this.generation) throw windowEnded(this.t);
           this.windowToken = result.windowToken;
         }).finally(() => { if (this.opening === opening) this.opening = null; });
         this.opening = opening;
@@ -70,9 +72,9 @@ export class PrivacyClient {
   async unlock(pin) {
     const attempt = ++this.unlockAttempt, generation = this.generation;
     await this.window();
-    if (generation !== this.generation || attempt !== this.unlockAttempt) throw windowEnded();
+    if (generation !== this.generation || attempt !== this.unlockAttempt) throw windowEnded(this.t);
     const result = await this.call('unlock', { pin });
-    if (generation !== this.generation || attempt !== this.unlockAttempt) throw windowEnded();
+    if (generation !== this.generation || attempt !== this.unlockAttempt) throw windowEnded(this.t);
     this.accessToken = result.accessToken; this.update({ unlocked: true });
   }
   async setHidden(sessionId, hidden) {

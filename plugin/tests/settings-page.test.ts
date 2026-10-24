@@ -1,3 +1,4 @@
+import {createTranslator} from '../src/locales.ts';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync } from 'node:fs';
@@ -20,7 +21,8 @@ test('settings response prevents caching, framing and third-party script executi
   assert.ok((await first.text()).includes(`<script nonce="${nonce}">`));
 });
 
-test('settings DOM completes enrollment, cancellation, PIN change and recovery through the real API', { timeout: 15_000 }, async t => {
+for(const language of ['en','zh']) test(`settings DOM enrollment, cancellation, PIN change and recovery (${language})`, { timeout: 15_000 }, async t => {
+  const tr=createTranslator(language);
   t.mock.timers.enable({ apis: ['Date'], now: 1_800_000_000_000 });
   const directory = mkdtempSync(join(tmpdir(), 'dsh-settings-dom-'));
   const credentials = new Credentials(directory, { attemptsPerWindow: 5, initialCooldownMs: 60_000,
@@ -47,7 +49,7 @@ test('settings DOM completes enrollment, cancellation, PIN change and recovery t
     assert.equal(this.download, 'dsh-locked-chats-recovery.txt');
     assert.equal(this.href, 'blob:synthetic-download');
   };
-  window.document.write(await settingsPage().text());
+  window.document.write(await settingsPage(new Request('http://localhost/api/locked-chats/settings?lang='+language)).text());
   const doc = window.document;
   const settle = async () => {
     // Scrypt runs outside the DOM timer owner; poll an observable completion, bounded by this test's timeout.
@@ -69,12 +71,12 @@ test('settings DOM completes enrollment, cancellation, PIN change and recovery t
     await settle();
   };
   await settle();
-  click('首次设置 PIN');
+  click(tr('setupPin'));
   await submit({ pin: '1357', confirmation: '1357' });
   assert.equal(credentials.status().configured, false);
   const firstCode = doc.querySelector<HTMLTextAreaElement>('#code')!.value;
   assert.ok(firstCode.startsWith('DSHR1:'));
-  click('下载恢复文件');
+  click(tr('downloadRecovery'));
   const exported = await exportedText;
   assert.equal(exported, firstCode + '\n');
   const fileInput = doc.querySelector('input[type="file"]')!;
@@ -87,13 +89,13 @@ test('settings DOM completes enrollment, cancellation, PIN change and recovery t
   await submit({});
   assert.equal(credentials.status().configured, true, doc.getElementById('message')!.textContent);
   assert.equal(doc.querySelector<HTMLTextAreaElement>('#code')!.value, '');
-  click('更换恢复码'); await submit({ pin: '1357' });
-  click('取消'); await settle();
+  click(tr('rotateRecovery')); await submit({ pin: '1357' });
+  click(tr('cancel')); await settle();
   assert.ok(credentials.beginRecovery('check', firstCode));
-  click('修改 PIN'); await submit({ oldPin: '1357', pin: '2468', confirmation: '2468' });
+  click(tr('changePin')); await submit({ oldPin: '1357', pin: '2468', confirmation: '2468' });
   await credentials.verifyPin('2468');
   await assert.rejects(credentials.verifyPin('1357'));
-  click('忘记 PIN'); await submit({ recoveryCode: firstCode });
+  click(tr('forgotPin')); await submit({ recoveryCode: firstCode });
   await submit({ pin: '9753', confirmation: '9753' });
   const secondCode = doc.querySelector<HTMLTextAreaElement>('#code')!.value;
   assert.notEqual(secondCode, firstCode);
@@ -101,17 +103,17 @@ test('settings DOM completes enrollment, cancellation, PIN change and recovery t
   await credentials.verifyPin('9753');
   assert.throws(() => credentials.beginRecovery('check', firstCode));
   assert.ok(credentials.beginRecovery('check', secondCode));
-  click('更换恢复码'); await submit({ pin: '9753' });
+  click(tr('rotateRecovery')); await submit({ pin: '9753' });
   const abandonedCode = doc.querySelector<HTMLTextAreaElement>('#code')!.value;
   t.mock.timers.tick(600_001); api.sweep();
   await submit({ recoveryCode: abandonedCode });
-  assert.ok(doc.getElementById('message')!.textContent.includes('窗口访问已结束'));
+  assert.ok(doc.getElementById('message')!.textContent.includes(tr('error.wrong_connection')));
   assert.equal(doc.querySelector<HTMLTextAreaElement>('#code')!.value, '');
   assert.equal(doc.getElementById('choices')!.hidden, false);
   assert.ok(credentials.beginRecovery('check-preserved', secondCode));
-  click('修改 PIN'); await submit({ oldPin: '9753', pin: '8642', confirmation: '8642' });
+  click(tr('changePin')); await submit({ oldPin: '9753', pin: '8642', confirmation: '8642' });
   await credentials.verifyPin('8642');
   assert.equal(window.localStorage.length, 0);
   assert.equal(window.sessionStorage.length, 0);
-  assert.ok(doc.body.textContent.includes('界面隐藏版'));
+  assert.ok(doc.body.textContent.includes(tr('standaloneNotice')));
 });

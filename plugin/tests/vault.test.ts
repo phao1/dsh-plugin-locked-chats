@@ -35,7 +35,7 @@ test('vault groups only locked members, preserving workspace data and independen
   const catalog={byId:{a:{id:'a'},b:{id:'b'},c:{id:'c'}}};
   const workspaces=[{workspaceId:'p',title:'Project',sessionIds:['a','b']}];
   assert.deepEqual(vaultGroups(catalog,['a','c','missing'],workspaces),[
-    {id:'p',title:'Project',rows:[{id:'a'}]},{id:'',title:'独立聊天',rows:[{id:'c'}]},
+    {id:'p',title:'Project',rows:[{id:'a'}]},{id:'',title:'Standalone chats',rows:[{id:'c'}]},
   ]);
   assert.deepEqual(workspaces[0]?.sessionIds,['a','b']);
   assert.deepEqual(vaultGroups(catalog,[],workspaces),[]);
