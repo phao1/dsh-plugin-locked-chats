@@ -1,3 +1,5 @@
+> Historical implementation record for 2026-10-24. This source is now included in v0.1.3; see [current release acceptance](RELEASE-0.1.3.en.md). The original restrictions below describe that earlier session.
+
 # English UI validation — unreleased source
 
 [简体中文](LOCALIZATION.zh-CN.md) · **English**

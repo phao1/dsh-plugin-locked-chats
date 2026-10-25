@@ -6,22 +6,22 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-A Web plugin for DeepSeek Harness that keeps selected chats and workspaces out of everyday navigation behind a four-digit PIN. Version **0.1.2** adds declared rc.3 support while retaining rc.2 compatibility and the expired-window reconnection fix from **0.1.1**. It does not require changes to dsh source code.
+A Web plugin for DeepSeek Harness that keeps selected chats and workspaces out of everyday navigation behind a four-digit PIN. Version **0.1.3** ships English and Simplified Chinese interfaces while retaining rc.2/rc.3 compatibility and the previous reconnection and native New Session fixes. It does not require changes to dsh source code.
 
 > This is an application UI privacy feature, not encryption or a security boundary for the underlying chat data.
 
 ## Requirements and installation
 
-Compatibility targets: DeepSeek Harness **0.2.1-rc.2 or 0.2.1-rc.3**; other versions are not declared compatible. The current source follows dsh’s English / Simplified Chinese language preference (General settings). Previously distributed packages still use Chinese: this localization update has not been released or published. This documentation is available in both languages. Choose the installation method for your client.
+Compatibility targets: DeepSeek Harness **0.2.1-rc.2 or 0.2.1-rc.3**; other versions are not declared compatible. The 0.1.3 package follows dsh’s English / Simplified Chinese language preference (General settings); no separate language package is needed. This documentation is available in both languages. Choose the installation method for your client.
 
-This release is distributed as a GitHub Release tarball; npm `0.1.2` has not been published. Install the URL below directly.
+This release is distributed as a GitHub Release tarball; npm `0.1.3` has not been published. Install the URL below directly.
 
 ### Desktop
 
 Open **Plugins → Add plugin** in the desktop sidebar and enter this release tarball URL. After installation, choose **Enable now** and restart the app:
 
 ```text
-https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
+https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
 ```
 
 Alternatively, install with the command provided by the desktop app:
@@ -30,7 +30,7 @@ Alternatively, install with the command provided by the desktop app:
 2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
 
    ```sh
-   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
+   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
    ```
 
 3. Reopen the desktop app.
@@ -42,7 +42,7 @@ Desktop bundles its runtime. For command-line installation, use the desktop-regi
 Requires **Node.js 24+**. Run:
 
 ```sh
-dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
+dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
 ```
 
 Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
@@ -50,17 +50,17 @@ Restart the corresponding dsh profile and refresh the Web interface. Plugin inst
 
 Use a separate plugin data directory for each independent installation. Back up your dsh data and plugin state before testing in production.
 
-## Upgrade from 0.1.0 / 0.1.1
+## Upgrade from 0.1.0 / 0.1.1 / 0.1.2
 
 Fully quit Desktop and run the `--profile desktop add` command above with the desktop-registered `dsh`, then reopen the app. For Web, run the `--profile web add` command above, restart the profile, and refresh its page. The same commands replace an earlier local fix package with the release package.
 
-Your chats, PIN, and recovery code are preserved; no credential reset is needed. See the [0.1.2 release notes](CHANGELOG.md).
+Your chats, PIN, and recovery code are preserved; no credential reset is needed. See the [0.1.3 release notes](CHANGELOG.md).
 
 ## Host compatibility policy
 
 The declared range is `0.2.1-rc.2 || 0.2.1-rc.3`. RC plugin interfaces can change, so support is extended after checking interfaces, package installation, and user behavior on each new host version. The plugin does not use `*` or silently waive the host compatibility check. A version outside the range is unverified, not necessarily broken.
 
-Version `0.1.2` passed 71 automated tests in each client-interface environment, build, and typecheck. The package was installed on official rc.2 and rc.3 Web Hosts and verified for locking, PIN unlock, continued chat, search filtering, native views/groups, and persistent drag ordering. Replies used a local synthetic model. Desktop rc.3 still requires user acceptance; Web verification is not Desktop verification.
+Version `0.1.3` passed 77 tests in each rc.2/rc.3 interface environment, build and typecheck. Both official Web Hosts were upgraded from the older package and checked for English settings, original-PIN unlock and continued chat; rc.3 also covered locking, search filtering, groups/views and persistent drag ordering. Replies used a local synthetic model. Desktop remains for user acceptance; Web verification is not Desktop verification. One-click upgrading is deferred.
 
 ## Features
 
@@ -138,8 +138,8 @@ Build, typecheck, and unit tests use published dependencies and do not require a
 
 [MIT](LICENSE) © 2026 Hao Peng.
 
-## Interface language (unreleased source)
+## Interface language (0.1.3)
 
 Settings, PIN/recovery flows, lock/unlock dialogs, errors, previews, and accessibility labels follow the host language without resetting credentials or clearing an open form. User-written chat/workspace titles and messages stay as written. No dsh source changes are needed.
 
-The standalone owner settings page has no client locale service. It uses the browser’s `Accept-Language` preference with English fallback; `?lang=en` or `?lang=zh` selects a language explicitly. Historical product screenshots show isolated Chinese 0.1.0 components, not this update or a full host. See [validation and screenshot limits](https://github.com/phao1/dsh-plugin-locked-chats/blob/fix/english-localization/LOCALIZATION.en.md).
+The standalone owner settings page has no client locale service. It uses the browser’s `Accept-Language` preference with English fallback; `?lang=en` or `?lang=zh` selects a language explicitly. Historical product screenshots show isolated Chinese 0.1.0 components, not this update or a full host. See [validation and screenshot limits](https://github.com/phao1/dsh-plugin-locked-chats/blob/v0.1.3/RELEASE-0.1.3.en.md).

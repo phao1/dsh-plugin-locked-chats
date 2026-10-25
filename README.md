@@ -22,7 +22,7 @@
 
 **Locked Chats 给 DeepSeek Harness Web 加上一层日常界面隐私：用 PIN 打开锁定区，继续原来的对话；用自己保存的恢复文件，在忘记 PIN 时重新拿回访问权。**
 
-独立插件，一条命令安装，无需修改 dsh 源码。`0.1.2` 增加 dsh `0.2.1-rc.3` 兼容声明，并保留 `rc.2` 支持和 `0.1.1` 的窗口重连修复；同时修复 rc.3 普通新建会话可能复用保险箱草稿的问题。
+独立插件，一条命令安装，无需修改 dsh 源码。`0.1.3` 发布 English / 简体中文界面，保留 dsh `0.2.1-rc.2` / `0.2.1-rc.3` 兼容及此前的窗口重连、原生新建会话修复。
 
 > 界面隐私，不是磁盘加密。适合减少日常展示中的意外曝光；不能阻止有文件、API 或设备访问权限的人读取数据。
 
@@ -42,14 +42,14 @@
 
 兼容目标为 **dsh 0.2.1-rc.2 或 0.2.1-rc.3**。按你使用的客户端选择安装方式。
 
-本轮交付 GitHub Release 安装包；npm `0.1.2` 尚未发布。以下链接可直接安装。
+本轮交付 GitHub Release 安装包；npm `0.1.3` 尚未发布。以下链接可直接安装。
 
 ### 桌面端
 
 在桌面端侧栏打开 **插件 → 添加插件**，输入以下安装包链接，安装后点击 **立即启用**，再重启桌面端：
 
 ```text
-https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
+https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
 ```
 
 也可以使用桌面端提供的命令安装：
@@ -58,7 +58,7 @@ https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-pl
 2. **完全退出桌面端**（仅关闭窗口会保留后台进程），打开新终端执行：
 
    ```sh
-   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
+   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
    ```
 
 3. 重新打开桌面端。
@@ -70,16 +70,16 @@ https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-pl
 需要 **Node.js 24+**，执行：
 
 ```sh
-dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.2/dsh-plugin-locked-chats-0.1.2.tgz
+dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
 ```
 
 重启对应 dsh profile，刷新 Web 页面。`web` 和 `desktop` 的插件安装独立，使用哪个客户端就安装到对应 profile。
 
-### 从 0.1.0 / 0.1.1 升级
+### 从 0.1.0 / 0.1.1 / 0.1.2 升级
 
 完全退出桌面端后，用桌面端注册的 `dsh` 执行上方 `--profile desktop add` 命令，再重新打开应用；Web 端执行上方 `--profile web add` 命令后重启对应 profile 并刷新页面。这也适用于此前安装的本地修复包。
 
-升级保留现有聊天、PIN 和恢复码，无需重新设置。闲置过期后再次输入 PIN 即可重新连接。完整变更见 [0.1.2 版本说明](plugin/CHANGELOG.md)。
+升级保留现有聊天、PIN 和恢复码，无需重新设置。闲置过期后再次输入 PIN 即可重新连接。完整变更见 [0.1.3 版本说明](plugin/CHANGELOG.md)。
 
 ### 开始使用
 
@@ -89,11 +89,11 @@ dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/re
 
 想保护整个项目？在保险箱中选择 **锁定工作区**。以后在该工作区新建的聊天也会被纳入保护，不必逐条操作。
 
-**尚未发布的源码更新：** 插件界面现已跟随 dsh 的 English / 简体中文语言偏好，覆盖设置、恢复、锁定/解锁弹窗、错误与无障碍标签。请在 dsh 的通用设置中选择语言。此前分发的安装包仍为中文，上方安装链接不包含本次源码更新。详见[英文化验证与限制](LOCALIZATION.zh-CN.md)。
+**0.1.3 已包含英文界面：** 在 dsh 的“设置 → 通用设置 → 语言”选择 English 或中文，插件设置、恢复、锁定/解锁弹窗、错误与无障碍标签同步切换。用户填写的标题与正文保持原文。详见[双语发布验收](RELEASE-0.1.3.zh-CN.md)。
 
 ## 看得见的本地控制权
 
-以下为 **0.1.0 真实插件设置组件的隔离演示截图**，不是完整 dsh 宿主截图。展示外框与基础控件样式为演示适配；不含真实聊天、PIN 或恢复码。实际外观随宿主主题变化。这些历史中文图片不能作为尚未发布的英文界面演示；当前浏览器及宿主限制下未能重新截图。
+以下为 **0.1.0 真实插件设置组件的隔离演示截图**，不是完整 dsh 宿主截图。展示外框与基础控件样式为演示适配；不含真实聊天、PIN 或恢复码。实际外观随宿主主题变化。这些历史中文图片不是 0.1.3 英文界面证据；新版真实 Web 宿主截图见[发布验收](RELEASE-0.1.3.zh-CN.md)。
 
 ### 01 · PIN、恢复、凭据更换，一个入口
 
@@ -159,7 +159,7 @@ dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/re
 
 兼容范围明确列为 dsh `0.2.1-rc.2 || 0.2.1-rc.3`。RC 版本的插件接口仍可能变化，因此不使用 `*` 或开放式范围；后续宿主版本通过接口、安装及行为验证后再扩展支持。范围之外的版本会被宿主阻止加载，不代表已证明运行不兼容。完整后台任务资格限制、账户同步和生物识别尚未实现。
 
-`0.1.2` 已通过两套接口环境各 71 项自动化测试、构建和类型检查，并在官方 rc.2/rc.3 真实 Web 宿主安装后完成锁定、PIN 解锁、继续聊天、搜索过滤、原生视图/分组和拖拽持久化验收。测试回复来自本地合成模型。桌面端 rc.3 仍待用户验收，Web 验证不等同于桌面端验证。
+`0.1.3` 已通过 rc.2/rc.3 两套接口环境各 77 项自动化测试、构建和类型检查；在两版官方 Web 宿主从旧包升级后验证英文设置、原 PIN 解锁和继续聊天，并在 rc.3 回归锁定、搜索过滤、分组/视图与拖拽持久化。回复来自本地合成模型。桌面端仍待用户验收；Web 通过不等于桌面端通过。一键升级本轮不实现。
 
 ```sh
 cd plugin
