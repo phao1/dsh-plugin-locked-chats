@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-locked-chats",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Web vault with workspace/chat hiding, PIN recovery and scoped local memory; no deletion, API or disk isolation",
   "type": "module",
   "main": "lib/index.js",
@@ -35,14 +35,15 @@
         "@deepseek-ai/dsh-api-workspace-controller",
         "@deepseek-ai/dsh-client-ui-layout",
         "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-settings-general"
+        "@deepseek-ai/dsh-client-ui-settings-general",
+        "@deepseek-ai/dsh-client-locale"
       ],
       "platform": "web"
     }
   },
   "engines": {
     "node": ">=24",
-    "dsh": "0.2.1-rc.2"
+    "dsh": "0.2.1-rc.2 || 0.2.1-rc.3"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json && node scripts/build-client.mjs",
@@ -55,7 +56,7 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "4.0.5",
-    "@deepseek-ai/dsh-client-connection": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-client-connection": "0.2.1-rc.2 || 0.2.1-rc.3",
     "@deepseek-ai/schemastery": "3.18.5",
     "react": "^18.2.0"
   },

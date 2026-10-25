@@ -22,7 +22,7 @@ Sharing your screen without sharing every chat title? Mixing everyday developmen
 
 **Locked Chats adds everyday interface privacy to DeepSeek Harness Web. Open your locked chats with a PIN, continue the original conversation, and regain access with a recovery file you saved yourself.**
 
-One plugin. One install command. No dsh source changes. Release `0.1.1` includes chat hiding, workspace locks, recovery files, and separate local memory domains for the plugin, and fixes unlock failures caused by expired window credentials after inactivity or a Host restart.
+One plugin. One install command. No dsh source changes. Release `0.1.3` ships English and Simplified Chinese interfaces, retaining dsh `0.2.1-rc.2` / `0.2.1-rc.3` support and the previous reconnection and native New Session fixes.
 
 > Interface privacy, not disk encryption. Designed to reduce accidental exposure during everyday use; it does not block someone with file, API, or device access.
 
@@ -40,14 +40,16 @@ One plugin. One install command. No dsh source changes. Release `0.1.1` includes
 
 ## Start in a minute
 
-Requires **dsh 0.2.1-rc.2**. Choose the installation method for your client.
+Compatibility targets: **dsh 0.2.1-rc.2 or 0.2.1-rc.3**. Choose the installation method for your client.
+
+This release is distributed as a GitHub Release tarball; npm `0.1.3` has not been published. Install the URL below directly.
 
 ### Desktop
 
-Open **Plugins → Add plugin** in the desktop sidebar and enter this package spec. After installation, choose **Enable now** and restart the app:
+Open **Plugins → Add plugin** in the desktop sidebar and enter this release tarball URL. After installation, choose **Enable now** and restart the app:
 
 ```text
-dsh-plugin-locked-chats@0.1.1
+https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
 ```
 
 Alternatively, install with the command provided by the desktop app:
@@ -56,7 +58,7 @@ Alternatively, install with the command provided by the desktop app:
 2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
 
    ```sh
-   dsh plugin --profile desktop add dsh-plugin-locked-chats@0.1.1
+   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
    ```
 
 3. Reopen the desktop app.
@@ -68,28 +70,30 @@ Desktop bundles its runtime. For command-line installation, use the desktop-regi
 Requires **Node.js 24+**. Run:
 
 ```sh
-dsh plugin --profile web add dsh-plugin-locked-chats@0.1.1
+dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
 ```
 
 Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
 
-### Upgrade from 0.1.0
+### Upgrade from 0.1.0 / 0.1.1 / 0.1.2
 
 Fully quit Desktop, run the `--profile desktop add` command above using the desktop-registered `dsh`, then reopen the app. For Web, run the `--profile web add` command above, restart that profile, and refresh the page. These steps also replace the earlier local fix package.
 
-Upgrading preserves existing chats, PINs, and recovery codes. No credential reset is needed. After an idle window expires, enter your PIN again to reconnect. See the [0.1.1 release notes](plugin/CHANGELOG.md).
+Upgrading preserves existing chats, PINs, and recovery codes. No credential reset is needed. After an idle window expires, enter your PIN again to reconnect. See the [0.1.3 release notes](plugin/CHANGELOG.md).
 
 ### First use
 
-1. Open a chat menu and choose **锁定聊天** (Lock chat).
+1. Open a chat menu and choose **Lock chat** (**锁定聊天** in Chinese).
 2. Set a four-digit PIN. **Download and safely store the recovery file**, then enter its code to confirm the backup.
-3. Open **锁定聊天** below the workspace heading, enter your PIN, and continue. Choose **立即上锁** to lock again when finished.
+3. Open **Locked Chats** (**锁定聊天**) below the workspace heading, enter your PIN, and continue. Choose **Lock now** (**立即上锁**) when finished.
 
-For a whole project, choose **锁定工作区** inside the vault. Future chats in that workspace are included automatically. The plugin UI currently uses Chinese.
+For a whole project, choose **Lock workspace** (**锁定工作区**) inside the vault. Future chats in that workspace are included automatically.
+
+**0.1.3 includes the English UI:** choose English or Chinese in dsh Settings → General → Language. Plugin settings, recovery, lock/unlock dialogs, errors and accessibility labels follow that choice. User-authored titles and messages stay unchanged. See [bilingual release acceptance](RELEASE-0.1.3.en.md).
 
 ## Local control you can see
 
-These are **isolated demonstrations of the actual 0.1.0 settings component**, not full dsh host screenshots. The presentation frame and base-control styling are demo adaptations. No real chats, PINs, or recovery codes are shown; host themes may look different.
+These are **isolated demonstrations of the actual 0.1.0 settings component**, not full dsh host screenshots. The presentation frame and base-control styling are demo adaptations. No real chats, PINs, or recovery codes are shown; host themes may look different. These historical Chinese images do not demonstrate the 0.1.3 English UI; see [release acceptance](RELEASE-0.1.3.en.md) for current real Web Host screenshots.
 
 ### 01 · One place for PINs and recovery
 
@@ -129,7 +133,7 @@ Comparison checked **2026-10-23** against [OpenAI's projects and chats documenta
 
 ## Recover a forgotten PIN
 
-Open **更多 → 设置 → 锁定聊天 → 忘记 PIN** (More → Settings → Locked Chats → Forgot PIN).
+Open **More → Settings → Locked Chats → Forgot PIN** (**更多 → 设置 → 锁定聊天 → 忘记 PIN** in Chinese).
 
 1. Import your saved `dsh-locked-chats-recovery.txt`, or enter its recovery code.
 2. After verification, choose and confirm a new PIN.
@@ -153,9 +157,9 @@ Locking a chat does not retroactively make its old ordinary memories private. Ot
 
 Hiding applies to supported Web surfaces. Raw APIs, CLI tools, chat files, other clients, and disabling the plugin can bypass it. Existing shares are not revoked; other open windows may need a refresh. This is not a security boundary against device administrators or malicious software.
 
-Validated target: dsh `0.2.1-rc.2`. Other versions, full background-task eligibility controls, account synchronization, and biometrics are unverified or unimplemented.
+The compatibility range explicitly lists dsh `0.2.1-rc.2 || 0.2.1-rc.3`. RC plugin interfaces can change, so the plugin does not use `*` or an open-ended range. Future host versions are added after interface, installation, and behavior checks. Versions outside this range are blocked by the host; that does not prove a runtime incompatibility. Full background-task eligibility controls, account synchronization, and biometrics are not implemented.
 
-Build, typecheck, and **69 tests passed** before release. Packed import, service activation, and disposal checks also passed. Isolated tests do not cover every real host scenario.
+Version `0.1.3` passed 77 tests in each rc.2/rc.3 interface environment, build and typecheck. Both official Web Hosts were upgraded from the older package and checked for English settings, original-PIN unlock and continued chat; rc.3 also covered locking, search filtering, groups/views and persistent drag ordering. Replies used a local synthetic model. Desktop remains for user acceptance; Web verification is not Desktop verification. One-click upgrading is deferred.
 
 ```sh
 cd plugin

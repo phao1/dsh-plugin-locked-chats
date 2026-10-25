@@ -83,6 +83,6 @@ export async function apply(ctx: Context, config: Config): Promise<void> {
     yield ctx.connection.fetch.register({ path: '/api/locked-chats/credentials', methods: ['POST'],
       requestBody: 'streaming', fetch: request => api.fetch(request) });
     yield ctx.connection.fetch.register({ path: '/api/locked-chats/settings', methods: ['GET'],
-      requestBody: 'buffered', fetch: async () => settingsPage() });
+      requestBody: 'buffered', fetch: async request => settingsPage(request) });
   }, 'locked-chats: ordered storage and transport lifecycle');
 }
