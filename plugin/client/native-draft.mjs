@@ -1,6 +1,9 @@
+import {createTranslator} from '../src/locales.ts';
+const defaultTranslate=createTranslator('en');
 /** Prepare an explicitly hidden session before mounting the host-owned editor. */
 export async function prepareNativeDraft(client,sessions,workspaceId,existingId) {
-  if(!client.state.unlocked)throw new Error('请先验证 PIN。');
+  const t=client.t??defaultTranslate;
+  if(!client.state.unlocked)throw Object.assign(new Error(t("verifyFirst")),{key:'verifyFirst'});
   let id=existingId;
   if(!id){
     const requested=crypto.randomUUID();
@@ -9,7 +12,7 @@ export async function prepareNativeDraft(client,sessions,workspaceId,existingId)
     id=await sessions.create({sessionId:requested,workspaceId});
     if(id!==requested){await client.setHidden(id,true);await client.setHidden(requested,false);}
   }
-  if(!client.state.unlocked)throw new Error('访问已结束，请重新验证。');
+  if(!client.state.unlocked)throw Object.assign(new Error(t("error.access_expired")),{code:'access_expired'});
   return id;
 }
 

@@ -1,23 +1,40 @@
 import { randomBytes } from 'node:crypto';
+import {createTranslator,en,zh,resolveLanguage} from './locales.ts';
 
 /** Owner-authenticated settings surface. Never embeds stored or generated credentials in HTML. */
-export function settingsPage(): Response {
+export function settingsPage(request?: Request): Response {
+  const language=pageLanguage(request),t=createTranslator(language);
   const nonce = randomBytes(24).toString('base64');
-  return new Response(`<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PIN 与恢复码</title><style nonce="${nonce}">
+  return new Response(`<!doctype html><html lang="${language==='zh'?'zh-CN':'en'}"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${t("settingsTitle")}</title><style nonce="${nonce}">
 :root{color-scheme:light dark;--lc-bg:#fff;--lc-fg:#202020;--lc-muted:#777;--lc-soft:#f6f7f8;--lc-line:#e9e9e9;--lc-action:#181818;--lc-action-text:#fff}@media(prefers-color-scheme:dark){:root{--lc-bg:#171717;--lc-fg:#eee;--lc-muted:#a0a0a0;--lc-soft:#232323;--lc-line:#333;--lc-action:#eee;--lc-action-text:#171717}}body{font:14px/1.65 system-ui,-apple-system,sans-serif;background:var(--lc-bg);color:var(--lc-fg);margin:0}main{max-width:520px;margin:64px auto;padding:32px}h1{font-size:24px;font-weight:600;letter-spacing:-.5px;margin:0 0 24px}h2{font-size:17px}label{display:block;margin:18px 0 8px;color:var(--lc-muted)}input,textarea,button{font:inherit;box-sizing:border-box}input,textarea{width:100%;padding:11px 12px;border:1px solid var(--lc-line);border-radius:10px;background:var(--lc-bg);color:var(--lc-fg);margin-top:6px}input:focus,textarea:focus{outline:2px solid var(--lc-muted);outline-offset:2px}textarea{min-height:100px;font-size:13px}button{padding:9px 16px;margin:12px 8px 0 0;border:1px solid var(--lc-line);border-radius:10px;background:var(--lc-action);color:var(--lc-action-text);cursor:pointer}button:hover{opacity:.85}button:disabled{opacity:.5;cursor:wait}#cancel{background:transparent;color:var(--lc-fg)}.notice{padding:14px 16px;background:var(--lc-soft);border-radius:10px;color:var(--lc-muted);font-size:13px}.muted{color:var(--lc-muted);font-size:13px}#message{min-height:24px;white-space:pre-wrap;color:var(--lc-muted)}nav{margin:18px 0}[hidden]{display:none!important}@media(max-width:600px){main{margin:24px auto;padding:24px}}
-</style><main><h1>PIN 与恢复码</h1>
-<p class="notice">界面隐藏版：设置 PIN 后，请从聊天菜单选择“锁定聊天”。此功能不加密数据，不限制原始 API；记忆隔离与生物识别尚未实现。</p>
-<p class="muted">PIN 用于日常验证。忘记 PIN 时可以使用恢复码重设；两者均丢失时无法恢复访问。请把恢复码保存在密码管理器或自行保管的恢复文件中。</p>
-<p id="message" role="status" aria-live="polite">正在连接…</p><nav id="choices" hidden></nav>
-<form id="form" hidden autocomplete="off"><div id="fields"></div><button id="submit" type="submit">继续</button><button id="cancel" type="button">取消</button></form>
-<section id="backup" hidden><h2>保存新的恢复码</h2><p>此码可以重设 PIN。不要分享给他人，也不要保存在插件数据目录中。确认完成前，原有凭据仍然有效。</p><textarea id="code" readonly aria-label="新恢复码"></textarea><button id="download" type="button">下载恢复文件</button><p>保存后，请在下方重新输入或粘贴备份的恢复码，再提交确认。</p></section>
-<p class="muted">关闭或刷新页面会放弃未确认的操作。此页面不把凭据写入浏览器持久存储。</p></main>
-<script nonce="${nonce}">${SETTINGS_SCRIPT}</script></html>`, { headers: {
-    'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store',
+</style><main><h1>${t("settingsTitle")}</h1>
+<p class="notice">${t("standaloneNotice")}</p>
+<p class="muted">${t("recoveryAdvice")}</p>
+<p id="message" role="status" aria-live="polite">${t("connecting")}</p><nav id="choices" hidden></nav>
+<form id="form" hidden autocomplete="off"><div id="fields"></div><button id="submit" type="submit">${t("continue")}</button><button id="cancel" type="button">${t("cancel")}</button></form>
+<section id="backup" hidden><h2>${t("saveNewRecovery")}</h2><p>${t("backupAdvice")}</p><textarea id="code" readonly aria-label="${t("newRecovery")}"></textarea><button id="download" type="button">${t("downloadRecovery")}</button><p>${t("backupPrompt")}</p></section>
+<p class="muted">${t("pageFootnote")}</p></main>
+<script nonce="${nonce}">${`'use strict';const messages=${JSON.stringify(language==='zh'?zh:en).replace(/</g,'\\u003c')};`}${SETTINGS_SCRIPT}</script></html>`, { headers: {
+    'content-language': language==='zh'?'zh-CN':'en', 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store',
     'content-security-policy': `default-src 'none'; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'`,
     'referrer-policy': 'no-referrer', 'x-content-type-options': 'nosniff',
   } });
+}
+
+/** A standalone page has no client locale service; use a supported query or browser preference. */
+function pageLanguage(request?: Request): 'en' | 'zh' {
+  if(!request)return 'en';
+  const requested=new URL(request.url).searchParams.get('lang');
+  if(requested!==null)return resolveLanguage(requested);
+  const accepted=(request.headers.get('accept-language')??'').split(',').map((entry,index)=>{
+    const [tag='',...parameters]=entry.trim().split(';');
+    const quality=parameters.find(parameter=>parameter.trim().startsWith('q='));
+    const q=quality===undefined?1:Number(quality.trim().slice(2));
+    return {tag,q,index};
+  }).filter(({tag,q})=>/^(?:en|zh)(?:-[a-z0-9]+)*$/i.test(tag)&&Number.isFinite(q)&&q>0&&q<=1)
+    .sort((a,b)=>b.q-a.q||a.index-b.index);
+  return resolveLanguage(accepted[0]?.tag);
 }
 
 // Browser-only code uses textContent and form controls, never user-controlled HTML.
@@ -25,14 +42,17 @@ export const SETTINGS_SCRIPT = String.raw`
 'use strict';
 const el = id => document.getElementById(id);
 let windowToken, configured = false, action, operation, recoveryGrant, busy = false;
-const messages = { invalid_pin:'PIN 不正确，或不是 4 位数字。', invalid_recovery:'恢复码无效。', invalid_input:'请检查输入，两次 PIN 必须一致。', backup_mismatch:'备份内容不一致，请重新输入保存的恢复码。', stale_operation:'凭据已发生变化，请重新开始操作。', expired_operation:'操作已过期，请重新开始。', wrong_connection:'窗口访问已结束，请重新开始操作。', unavailable:'凭据服务暂不可用，请稍后重试。', already_configured:'已设置 PIN，请选择其他操作。', too_many_operations:'操作过多，请稍后重试。' };
+const t=(key,values={})=>(messages[key]??messages.operationFailed).replace(/\{(\w+)\}/g,(placeholder,name)=>String(values[name]??placeholder));
 function say(text) { el('message').textContent = text; }
 async function call(payload) {
-  const response = await fetch('/api/locked-chats/credentials', { method:'POST', cache:'no-store', credentials:'same-origin', headers:{ 'content-type':'application/json', ...(windowToken ? {'x-dsh-private-window':windowToken} : {}) }, body:JSON.stringify(payload) });
-  const result = await response.json();
+  let response,result;
+  try {
+    response = await fetch('/api/locked-chats/credentials', { method:'POST', cache:'no-store', credentials:'same-origin', headers:{ 'content-type':'application/json', ...(windowToken ? {'x-dsh-private-window':windowToken} : {}) }, body:JSON.stringify(payload) });
+    result = await response.json();
+  } catch { throw new Error(t('connectionFailed')); }
   if (!response.ok) {
     if (result.error === 'wrong_connection') windowToken = undefined;
-    const error = new Error(result.error === 'throttled' ? '尝试次数过多，请在 '+result.retryAfterSeconds+' 秒后重试。' : (messages[result.error] || '操作失败，请重试。'));
+    const error = new Error(t('error.'+result.error,{seconds:result.retryAfterSeconds??60}));
     error.code = result.error; throw error;
   }
   return result;
@@ -42,7 +62,7 @@ async function failed(error) {
     home();
     try { configured = (await call({action:'status'})).configured; home(); } catch {}
   }
-  say(error instanceof Error ? error.message : '操作失败。');
+  say(error instanceof Error ? error.message : t("operationFailed"));
 }
 function controls(locked) { busy = locked; document.querySelectorAll('button').forEach(button => { button.disabled = locked; }); }
 function wipe() { el('fields').replaceChildren(); el('code').value = ''; el('backup').hidden = true; el('form').hidden = true; operation = undefined; recoveryGrant = undefined; action = undefined; }
@@ -53,17 +73,17 @@ function input(name, label, pin = false) {
   wrapper.append(field); el('fields').append(wrapper);
 }
 function recoveryFile() {
-  const wrapper = document.createElement('label'); wrapper.textContent = '导入恢复文件（可选）';
+  const wrapper = document.createElement('label'); wrapper.textContent = t("importRecovery");
   const file = document.createElement('input'); file.type = 'file'; file.accept = '.txt,text/plain';
   file.onchange = async () => {
     const selected = file.files && file.files[0]; if (!selected) return;
     const target = el('fields').querySelector('input[name="recoveryCode"]');
     try {
-      if (selected.size > 1024) throw new Error('恢复文件过大，请选择下载的恢复码文本文件。');
+      if (selected.size > 1024) throw Object.assign(new Error(t("fileTooLarge")),{localized:true});
       const code = (await selected.text()).trim();
-      if (!/^DSHR1:[a-f0-9-]+:[A-Za-z2-7]+:[a-fA-F0-9]{8}$/.test(code) || code.length > 256) throw new Error('文件不是有效的恢复码文本，请重新选择。');
-      if (target && target.isConnected) { target.value = code; say('已导入恢复码，请点击继续验证。'); }
-    } catch (error) { if (target && target.isConnected) say(error instanceof Error ? error.message : '无法读取恢复文件。'); }
+      if (!/^DSHR1:[a-f0-9-]+:[A-Za-z2-7]+:[a-fA-F0-9]{8}$/.test(code) || code.length > 256) throw Object.assign(new Error(t("fileInvalid")),{localized:true});
+      if (target && target.isConnected) { target.value = code; say(t("importedRecovery")); }
+    } catch (error) { if (target && target.isConnected) say(error?.localized ? error.message : t("fileReadFailed")); }
     finally { file.value = ''; }
   };
   wrapper.append(file); el('fields').append(wrapper);
@@ -71,40 +91,40 @@ function recoveryFile() {
 function show(next) {
   action = next; el('fields').replaceChildren(); el('choices').hidden = true; el('form').hidden = false;
   if (next === 'beginRecovery' || next === 'confirmBackup') {
-    input('recoveryCode', next === 'confirmBackup' ? '输入已保存的新恢复码' : '恢复码');
+    input('recoveryCode', next === 'confirmBackup' ? t("enterSavedRecovery") : t("recoveryCode"));
     recoveryFile();
   }
   else {
-    if (next === 'changePin') input('oldPin', '当前 PIN', true);
-    input('pin', next === 'rotateRecovery' ? '当前 PIN' : '新 PIN（4 位数字）', true);
-    if (next !== 'rotateRecovery') input('confirmation', '再次输入新 PIN', true);
+    if (next === 'changePin') input('oldPin', t("currentPin"), true);
+    input('pin', next === 'rotateRecovery' ? t("currentPin") : t("newPin"), true);
+    if (next !== 'rotateRecovery') input('confirmation', t("confirmNewPin"), true);
   }
   el('fields').querySelector('input').focus();
 }
 function home() {
   wipe(); el('choices').replaceChildren(); el('choices').hidden = false;
-  const options = configured ? [['changePin','修改 PIN'],['beginRecovery','忘记 PIN'],['rotateRecovery','更换恢复码']] : [['setup','首次设置 PIN']];
+  const options = configured ? [['changePin',t("changePin")],['beginRecovery',t("forgotPin")],['rotateRecovery',t("rotateRecovery")]] : [['setup',t("setupPin")]];
   for (const [mode, text] of options) { const button = document.createElement('button'); button.type = 'button'; button.textContent = text; button.onclick = () => { say(''); show(mode); }; el('choices').append(button); }
 }
 el('form').onsubmit = async event => {
-  event.preventDefault(); if (busy) return; controls(true); say('正在处理…');
+  event.preventDefault(); if (busy) return; controls(true); say(t("processing"));
   const payload = Object.fromEntries(new FormData(el('form'))); payload.action = action;
   if (action === 'confirmBackup') payload.operationId = operation;
   if (action === 'recover') payload.recoveryGrant = recoveryGrant;
   try {
     if (!windowToken) windowToken = (await call({action:'openWindow'})).windowToken;
     const result = await call(payload);
-    if (action === 'beginRecovery') { recoveryGrant = result.recoveryGrant; show('recover'); say('恢复码已验证，请设置新 PIN。'); }
+    if (action === 'beginRecovery') { recoveryGrant = result.recoveryGrant; show('recover'); say(t("recoveryVerified")); }
     else if (['setup','recover','rotateRecovery'].includes(action)) {
       operation = result.operationId; el('code').value = result.recoveryCode; el('backup').hidden = false;
-      show('confirmBackup'); el('form').before(el('backup')); say('请先保存恢复码；确认备份后才会更新凭据。');
-    } else { configured = true; home(); say('凭据已更新。请返回锁定聊天专区重新验证。'); }
+      show('confirmBackup'); el('form').before(el('backup')); say(t("saveBeforeConfirm"));
+    } else { configured = true; home(); say(t("pageCredentialsUpdated")); }
   } catch (error) { await failed(error); }
   finally { el('form').querySelectorAll('input').forEach(field => { field.value = ''; }); controls(false); }
 };
 el('cancel').onclick = async () => {
   if (busy) return; controls(true);
-  try { if (operation) await call({action:'cancel', operationId:operation}); home(); say('已取消，原有凭据未改变。'); }
+  try { if (operation) await call({action:'cancel', operationId:operation}); home(); say(t("cancelled")); }
   catch (error) { await failed(error); }
   finally { controls(false); }
 };
@@ -118,7 +138,7 @@ window.addEventListener('pagehide', () => {
 });
 window.addEventListener('pageshow', event => { if (event.persisted) location.reload(); });
 (async () => {
-  try { const state = await call({action:'status'}); configured = state.configured; windowToken = (await call({action:'openWindow'})).windowToken; home(); say(configured ? '已设置 PIN 和恢复码。' : '尚未设置 PIN。'); }
-  catch (error) { say(error instanceof Error ? error.message : '无法连接。'); }
+  try { const state = await call({action:'status'}); configured = state.configured; windowToken = (await call({action:'openWindow'})).windowToken; home(); say(configured ? t("configured") : t("notConfigured")); }
+  catch (error) { say(error instanceof Error ? error.message : t("connectionFailed")); }
 })();
 `;

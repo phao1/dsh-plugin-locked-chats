@@ -1,3 +1,5 @@
+import {createTranslator} from '../src/locales.ts';
+const defaultTranslate=createTranslator('en');
 const abortError=()=>new DOMException('Preview access ended','AbortError');
 const MAX_SOURCE=4096;
 
@@ -7,7 +9,7 @@ export function previewRevision(row) {
 }
 
 /** Project only readable human/model text from the host's existing tail window. */
-export function latestChatPreview(entries,plainText=value=>value,limit=120) {
+export function latestChatPreview(entries,plainText=value=>value,limit=120,t=defaultTranslate) {
   let attachments=false;
   for(let index=entries.length-1;index>=Math.max(0,entries.length-1000);index--){
     const item=entries[index];
@@ -30,11 +32,11 @@ export function latestChatPreview(entries,plainText=value=>value,limit=120) {
     const characters=Array.from(text);
     return characters.length>limit?characters.slice(0,limit-1).join('').trimEnd()+'…':text;
   }
-  return attachments?'仅附件消息，暂无文字摘要':'暂无正文';
+  return attachments?t("attachmentPreview"):t("emptyPreview");
 }
 
 /** Short-lived reads only: bounded concurrency, no history paging and no snippet cache. */
-export function createPreviewLoader(sessions,isUnlocked,{plainText,maxConcurrent=3}={}) {
+export function createPreviewLoader(sessions,isUnlocked,{plainText,maxConcurrent=3,t=defaultTranslate}={}) {
   const queue=[],active=new Set();let generation=0,closed=false;
   const concurrency=Math.max(1,Math.min(3,maxConcurrent));
   const finish=(job,error,value)=>{
@@ -59,8 +61,8 @@ export function createPreviewLoader(sessions,isUnlocked,{plainText,maxConcurrent
       try{binding=await Promise.race([reference.ready,aborted]);}finally{detachAbort();}
       if(closed||!isUnlocked()||job.generation!==generation||job.controller.signal.aborted)throw abortError();
       const state=binding.session.getSnapshot();
-      if(state.removed||state.openState==='error')throw new Error('摘要暂不可用');
-      const snippet=latestChatPreview(binding.eventSource.getSnapshot().entries,plainText);
+      if(state.removed||state.openState==='error')throw new Error(t("previewUnavailable"));
+      const snippet=latestChatPreview(binding.eventSource.getSnapshot().entries,plainText,120,t);
       if(!isUnlocked()||job.generation!==generation||job.controller.signal.aborted)throw abortError();
       finish(job,null,snippet);
     }catch(error){finish(job,error);}

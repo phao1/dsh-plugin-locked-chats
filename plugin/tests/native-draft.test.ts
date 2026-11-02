@@ -15,9 +15,9 @@ test('native editor session is hidden before host creation and never prompts its
 test('relocking finishes the hidden reservation but refuses to mount the native draft',async()=>{
   const client={state:{unlocked:true},setHidden:async()=>{client.state.unlocked=false;}};
   let created=false;
-  await assert.rejects(prepareNativeDraft(client,{create:async({sessionId}:any)=>{created=true;return sessionId;}},'w'),/访问已结束/);
+  await assert.rejects(prepareNativeDraft(client,{create:async({sessionId}:any)=>{created=true;return sessionId;}},'w'),/Access has expired/);
   assert.equal(created,true);
-  await assert.rejects(prepareNativeDraft(client,{},'w','existing'),/验证 PIN/);
+  await assert.rejects(prepareNativeDraft(client,{},'w','existing'),/Verify your PIN first/);
 });
 
 test('StrictMode concurrent mounts share creation only within the same workspace',async()=>{
