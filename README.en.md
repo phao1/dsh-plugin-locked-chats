@@ -22,7 +22,7 @@ Sharing your screen without sharing every chat title? Mixing everyday developmen
 
 **Locked Chats adds everyday interface privacy to DeepSeek Harness Web. Open your locked chats with a PIN, continue the original conversation, and regain access with a recovery file you saved yourself.**
 
-One plugin. One install command. No dsh source changes. Release `0.1.3` ships English and Simplified Chinese interfaces, retaining dsh `0.2.1-rc.2` / `0.2.1-rc.3` support and the previous reconnection and native New Session fixes.
+One plugin. One install command. No dsh source changes. Release `0.1.4` adds dsh `0.2.1-rc.5` compatibility while retaining rc.2/rc.3 support, English and Simplified Chinese interfaces, and the previous reconnection and native New Session fixes.
 
 > Interface privacy, not disk encryption. Designed to reduce accidental exposure during everyday use; it does not block someone with file, API, or device access.
 
@@ -40,16 +40,16 @@ One plugin. One install command. No dsh source changes. Release `0.1.3` ships En
 
 ## Start in a minute
 
-Compatibility targets: **dsh 0.2.1-rc.2 or 0.2.1-rc.3**. Choose the installation method for your client.
+Compatibility targets: **dsh 0.2.1-rc.2, 0.2.1-rc.3 or 0.2.1-rc.5**. Choose the installation method for your client.
 
-This release is distributed as a GitHub Release tarball; npm `0.1.3` has not been published. Install the URL below directly.
+Install the GitHub Release tarball below. npm `0.1.4` publication is deferred; the registry still serves the older release.
 
 ### Desktop
 
 Open **Plugins → Add plugin** in the desktop sidebar and enter this release tarball URL. After installation, choose **Enable now** and restart the app:
 
 ```text
-https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
+https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.4/dsh-plugin-locked-chats-0.1.4.tgz
 ```
 
 Alternatively, install with the command provided by the desktop app:
@@ -58,7 +58,7 @@ Alternatively, install with the command provided by the desktop app:
 2. **Fully quit the app** (closing the window keeps it running in the background), then open a new terminal and run:
 
    ```sh
-   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
+   dsh plugin --profile desktop add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.4/dsh-plugin-locked-chats-0.1.4.tgz
    ```
 
 3. Reopen the desktop app.
@@ -70,16 +70,16 @@ Desktop bundles its runtime. For command-line installation, use the desktop-regi
 Requires **Node.js 24+**. Run:
 
 ```sh
-dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.3/dsh-plugin-locked-chats-0.1.3.tgz
+dsh plugin --profile web add https://github.com/phao1/dsh-plugin-locked-chats/releases/download/v0.1.4/dsh-plugin-locked-chats-0.1.4.tgz
 ```
 
 Restart the corresponding dsh profile and refresh the Web interface. Plugin installations in `web` and `desktop` are independent; install into the profile used by your client.
 
-### Upgrade from 0.1.0 / 0.1.1 / 0.1.2
+### Upgrade from 0.1.0 / 0.1.1 / 0.1.2 / 0.1.3
 
 Fully quit Desktop, run the `--profile desktop add` command above using the desktop-registered `dsh`, then reopen the app. For Web, run the `--profile web add` command above, restart that profile, and refresh the page. These steps also replace the earlier local fix package.
 
-Upgrading preserves existing chats, PINs, and recovery codes. No credential reset is needed. After an idle window expires, enter your PIN again to reconnect. See the [0.1.3 release notes](plugin/CHANGELOG.md).
+Upgrading preserves existing chats, PINs, and recovery codes. No credential reset is needed. After an idle window expires, enter your PIN again to reconnect. See the [0.1.4 release notes](plugin/CHANGELOG.md).
 
 ### First use
 
@@ -157,9 +157,11 @@ Locking a chat does not retroactively make its old ordinary memories private. Ot
 
 Hiding applies to supported Web surfaces. Raw APIs, CLI tools, chat files, other clients, and disabling the plugin can bypass it. Existing shares are not revoked; other open windows may need a refresh. This is not a security boundary against device administrators or malicious software.
 
-The compatibility range explicitly lists dsh `0.2.1-rc.2 || 0.2.1-rc.3`. RC plugin interfaces can change, so the plugin does not use `*` or an open-ended range. Future host versions are added after interface, installation, and behavior checks. Versions outside this range are blocked by the host; that does not prove a runtime incompatibility. Full background-task eligibility controls, account synchronization, and biometrics are not implemented.
+The compatibility range explicitly lists dsh `0.2.1-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.5`. RC plugin interfaces can change, so the plugin does not use `*` or an open-ended range. Future host versions are added after interface, installation, and behavior checks. Versions outside this range are blocked by the host; that does not prove a runtime incompatibility. Full background-task eligibility controls, account synchronization, and biometrics are not implemented.
 
-Version `0.1.3` passed 77 tests in each rc.2/rc.3 interface environment, build and typecheck. Both official Web Hosts were upgraded from the older package and checked for English settings, original-PIN unlock and continued chat; rc.3 also covered locking, search filtering, groups/views and persistent drag ordering. Replies used a local synthetic model. Desktop remains for user acceptance; Web verification is not Desktop verification. One-click upgrading is deferred.
+See the [0.1.4 release record](RELEASE-0.1.4.en.md) for this compatibility fix, upgrade verification and limitations. rc.4, rc.6, stable 0.2.1 and 0.2.2 alpha are not declared supported; Desktop requires separate acceptance.
+
+Historical version `0.1.3` passed 77 tests in each rc.2/rc.3 interface environment, build and typecheck. Both official Web Hosts were upgraded from the older package and checked for English settings, original-PIN unlock and continued chat; rc.3 also covered locking, search filtering, groups/views and persistent drag ordering. Replies used a local synthetic model. Desktop remains for user acceptance; Web verification is not Desktop verification. One-click upgrading is deferred.
 
 ```sh
 cd plugin

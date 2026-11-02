@@ -9,15 +9,18 @@ assert.ok(process.argv[2], 'Pass the directory containing a real dsh installatio
 const requireHost = createRequire(resolve(process.argv[2], 'package.json'));
 const { evaluatePluginCompatibility } = await import(pathToFileURL(requireHost.resolve('@deepseek-ai/dsh-app-boot')));
 const manifest = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
-for (const version of ['0.2.1-rc.2', '0.2.1-rc.3']) {
+for (const version of ['0.2.1-rc.2', '0.2.1-rc.3', '0.2.1-rc.5']) {
   assert.equal(evaluatePluginCompatibility(manifest, {}, version), undefined, `Host must accept ${version} without exemptions`);
 }
-for (const version of ['0.2.1-rc.1', '0.2.1-rc.4', '0.2.1', '0.3.0']) {
+for (const version of ['0.2.1-rc.1', '0.2.1-rc.4', '0.2.1-rc.6', '0.2.2-alpha.2', '0.2.1', '0.3.0']) {
   assert.ok(evaluatePluginCompatibility(manifest, {}, version), `Do not claim unverified ${version} compatibility`);
 }
 const requireBoot = createRequire(requireHost.resolve('@deepseek-ai/dsh-app-boot'));
 const semver = requireBoot('semver');
-for (const version of ['0.2.1-rc.2', '0.2.1-rc.3']) {
+for (const version of ['0.2.1-rc.2', '0.2.1-rc.3', '0.2.1-rc.5']) {
   assert.ok(semver.satisfies(version, manifest.peerDependencies['@deepseek-ai/dsh-client-connection']), `Connection peer must accept ${version}`);
 }
-console.log(JSON.stringify({ accepted: ['0.2.1-rc.2', '0.2.1-rc.3'], unverifiedVersionsRejected: true, exemptions: false }));
+for (const version of ['0.2.1-rc.1', '0.2.1-rc.4', '0.2.1-rc.6', '0.2.1', '0.2.2-alpha.2', '0.3.0']) {
+  assert.equal(semver.satisfies(version, manifest.peerDependencies['@deepseek-ai/dsh-client-connection']), false, `Connection peer must reject unverified ${version}`);
+}
+console.log(JSON.stringify({ accepted: ['0.2.1-rc.2', '0.2.1-rc.3', '0.2.1-rc.5'], unverifiedVersionsRejected: true, exemptions: false }));

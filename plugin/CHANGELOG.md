@@ -2,6 +2,22 @@
 
 [English documentation](README.md) · [中文文档](README.zh-CN.md)
 
+## 0.1.4 — 2026-11-03 — DSH rc.5 compatibility / DSH rc.5 兼容
+
+### English
+
+- Add explicit dsh `0.2.1-rc.5` support in the Host engine and connection peer declarations, retaining rc.2 and rc.3.
+- Extend CI to rc.5 and test Host admission and connection-peer rejection for unverified versions. Do not exempt the Host compatibility check.
+- Preserve the existing bilingual interface, native components, chats, PIN, recovery credential and stored locks. No runtime feature or data-format change.
+- Update linked English and Chinese installation and upgrade guides. See [release verification](https://github.com/phao1/dsh-plugin-locked-chats/blob/v0.1.4/RELEASE-0.1.4.en.md) for actual results and platform limits.
+
+### 简体中文
+
+- 在宿主引擎及 connection peer 声明中显式增加 dsh `0.2.1-rc.5`，保留 rc.2 和 rc.3 支持。
+- CI 增加 rc.5，并检查宿主准入及 connection peer 对未验证版本的拒绝；不豁免宿主兼容检查。
+- 保留现有双语界面、原生组件、聊天、PIN、恢复凭据和锁定记录；不改变运行功能或数据格式。
+- 同步互链中英文安装升级说明。实际验收结果及平台限制见[发布记录](https://github.com/phao1/dsh-plugin-locked-chats/blob/v0.1.4/RELEASE-0.1.4.zh-CN.md)。
+
 ## 0.1.3 — 2026-10-25 — English and Chinese UI / 中英文界面
 
 ### English
